@@ -1,0 +1,124 @@
+@startuml
+
+package Transaction <<folder>> {
+
+    interface TransactionInterface {
+        Create(*TransactionInterface) (TransactionInterface, error)
+        GetAll() ([]TransactionInterface, error)
+        GetByCust(Customer) ([]TransactionInterface, error)
+        GetByAgent(Agent) ([]TransactionInterface, error)
+        GetAgentRating(Agent) Float
+        GetByID(int) (TransactionInterface, error)
+        Confirm() (TransactionInterface, error)
+        Cancel() (TransactionInterface, error)
+        Done() (TransactionInterface, error)
+        Delete() (TransactionInterface, error)
+    }
+
+    class Transaction {
+        id : int
+        customerId : Customer
+        agentId : Agent
+        locationId : Location
+        type : varchar
+        amount : int
+        status : int
+        ratting : int
+    }
+
+    TransactionInterface <|-- Transaction
+
+}
+
+package User <<folder>> {
+
+    interface UserInterface {
+        GetAll() ([]UserInterface, error)
+        GetByID(UserInterface) (UserInterface, error)
+    }
+
+    class User {
+        id : int
+        loginId : Login
+        name : string
+        phone_number : string
+    }
+
+    class Customer {
+    }
+
+    class Agent {
+        outletName : string
+        locationId : int
+        GetByLocation(city) ([]Agent, error)
+    }
+
+    UserInterface <|-- User
+    User <|-- Customer
+    User <|-- Agent
+
+}
+
+Package Auth <<folder>> {
+
+    interface LoginInterface {
+        Login(username, password) (User, error)
+        Logout(token) error
+    }
+
+    interface SessionInterface {
+        Create(User, token) error
+        Validate(token) (User, error)
+        Remove(token) error
+    }
+
+    class Login {
+        id : int
+        username : string
+        password : string
+        loginAs : int
+        lastLogin : time.Time
+    }
+
+    class Session {
+        id : int
+        loginId : Login
+        token : string
+        expiredAt : time.Time
+    }
+
+    LoginInterface <|-- Login
+    SessionInterface <|-- Session
+
+}
+
+package Location {
+
+    interface LocationInterface {
+        GetLocationByLogin(Login) ([]LocationInterface, error)
+    }
+
+    class Location {
+        id : int
+        createById : Login
+        address : string
+        province : string
+        city : string
+        district : string
+        latitude : Float
+        longitude : Float
+    }
+
+    LocationInterface <|-- Location
+}
+
+Transaction o--* Customer
+Transaction o--* Agent
+Transaction o--* Location
+Login *--* Customer
+Login *--* Agent
+Location *--o Agent
+Login *--o Session
+Login *--o Location
+
+@enduml

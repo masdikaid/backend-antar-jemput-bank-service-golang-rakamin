@@ -1,0 +1,244 @@
+@startuml
+
+box "Front End"
+actor "Front End" as FE
+end box
+
+box "Back End"
+participant "Api Route" as API
+participant Midleware
+entity Model
+end box
+
+box "databases"
+database "Mysql Database" as DB
+end box
+
+group Login [End Point: /login]
+' start login group
+FE -> API : [POST] /login
+activate API
+API -> Model : Login.Login(username, password) User
+activate Model
+Model -> DB : Read Login
+activate DB
+DB --> Model : Response
+deactivate
+Model -> Model : Generate JWT
+Model -> Model : Session.Create(User, token) error
+activate Model
+Model --> Model : Created
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end group
+end
+
+group Find Agent [End Point: /cariagen]
+' start find agent
+FE -> API : [POST] /cariagen
+activate API
+API -> Model : Agent.GetByLocation(city) []Agent
+activate Model
+Model -> DB : Read Agent join Location
+activate DB
+DB --> Model : response
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end find agent
+end
+
+group Create Transaction [End Point: /transaksi/create]
+' start create transaction
+FE -> API : [POST] /transaksi/create
+activate API
+API -> Midleware : Auth
+activate Midleware
+Midleware -> Model : Transaction.Create() Transaction
+deactivate
+activate Model
+Model -> DB : Write Transaction & Location
+activate DB
+DB --> Model : response
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end create transaction
+end
+
+group Get All Transaction [End Point: /transaksi]
+' start get all transaction
+FE -> API : [GET] /transaksi
+activate API
+API -> Midleware : Auth
+activate Midleware
+Midleware -> Model : Transaction.GetAll() []Transaction
+deactivate
+activate Model
+Model -> DB : Read Transaction join Location
+activate DB
+DB --> Model : response
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end get all transaction
+end
+
+group Get All Customer Transaction [End Point: /transaksi?id_customer=id]
+' start get customer transaction
+FE -> API : [GET] /transaksi?id_customer=id
+activate API
+API -> Midleware : Auth
+activate Midleware
+Midleware -> Model : Transaction.GetByCust(Customer) []Transaction
+deactivate
+activate Model
+Model -> DB : Read Transaction join Location
+activate DB
+DB --> Model : response
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end get customer transaction
+end
+
+group Get All Agent Transaction [End Point: /transaksi?id_agen=id]
+' start get agent transaction
+FE -> API : [GET] /transaksi?id_agen=id
+activate API
+API -> Midleware : Auth
+activate Midleware
+Midleware -> Model : Transaction.GetByAgent(Agent) []Transaction
+deactivate
+activate Model
+Model -> DB : Read Transaction join Location
+activate DB
+DB --> Model : response
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end get agent transaction
+end
+
+group Confirm Transaction [End Point: /transaksi/dikonfirmasi]
+' start confirm transaction
+FE -> API : [POST] /transaksi/dikonfirmasi
+activate API
+API -> Midleware : Auth
+activate Midleware
+Midleware -> Model : Transaction.GetByID(id) Transaction
+deactivate
+activate Model
+Model -> DB : Read Transaction join Location
+activate DB
+DB --> Model : response
+deactivate
+Model -> Model : Transaction.Confirm() Transaction
+activate Model
+Model -> DB : Update Transaction
+activate DB
+DB --> Model : response
+deactivate
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end confirm transaction
+end
+
+group cancel Transaction [End Point: /transaksi/dibatalkan]
+' start cancel transaction
+FE -> API : [POST] /transaksi/dibatalkan
+activate API
+API -> Midleware : Auth
+activate Midleware
+Midleware -> Model : Transaction.GetByID(id) Transaction
+deactivate
+activate Model
+Model -> DB : Read Transaction join Location
+activate DB
+DB --> Model : response
+deactivate
+Model -> Model : Transaction.Cancel() Transaction
+activate Model
+Model -> DB : Update Transaction
+activate DB
+DB --> Model : response
+deactivate
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end cancel transaction
+end
+
+group finish Transaction [End Point: /transaksi/selesai]
+' start finish transaction
+FE -> API : [POST] /transaksi/selesai
+activate API
+API -> Midleware : Auth
+activate Midleware
+Midleware -> Model : Transaction.GetByID(id) Transaction
+deactivate
+activate Model
+Model -> DB : Read Transaction join Location
+activate DB
+DB --> Model : response
+deactivate
+Model -> Model : Transaction.Done() Transaction
+activate Model
+Model -> DB : Update Transaction
+activate DB
+DB --> Model : response
+deactivate
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end finish transaction
+end
+
+group delete Transaction [End Point: /transaksi/delete/id]
+' start delete transaction
+FE -> API : [DEL] /transaksi/delete/id
+activate API
+API -> Midleware : Auth
+activate Midleware
+Midleware -> Model : Transaction.GetByID(id) Transaction
+deactivate
+activate Model
+Model -> DB : Read Transaction join Location
+activate DB
+DB --> Model : response
+deactivate
+Model -> Model : Transaction.Delete() Transaction
+activate Model
+Model -> DB : Update Transaction
+activate DB
+DB --> Model : response
+deactivate
+deactivate
+Model --> API : return
+deactivate
+API --> FE : response
+deactivate
+' end delete transaction
+end
+
+@enduml

@@ -1,0 +1,70 @@
+@startuml entities
+
+entity Login {
+    *id : int <<PK>>
+    --
+    username : varchar
+    password : varchar
+    login_as : int
+    last_login : datetime null
+}
+
+entity Sessions {
+    *id : int <<PK>>
+    --
+    login_id : int <<FK>>
+    token : varchar unique
+    expired_at : datetime
+}
+
+entity Customers {
+    *id : int <<PK>>
+    --
+    login_id : int unique <<FK>>
+    name : varchar
+    phone_number : varchar
+}
+
+entity Agents {
+    *id : int <<PK>>
+    --
+    login_id : int unique <<FK>>
+    location_id : int unique <<FK>>
+    outlet_name : varchar
+    name : varchar
+    phone_number : varchar
+}
+
+entity Location {
+    *id : int <<PK>>
+    --
+    *create_by_login_id : int <<FK>>
+    address : varchar
+    province : varchar
+    city : varchar
+    district : varchar
+    latitude : decimal null
+    longitude : decimal null
+}
+
+entity Transaction {
+    *id : int <<PK>>
+    --
+    customer_id : int <<FK>>
+    agent_id : int <<FK>>
+    location_id : int <<PK>>
+    type : varchar
+    amount : int
+    status : int
+    ratting : int null
+}
+
+Sessions }|--|| Login
+Customers ||--|| Login
+Agents ||--|| Login
+Agents ||--|| Location
+Location }|--|| Login
+Location }|--|| Transaction
+Transaction }|--|| Agents
+Transaction }|--|| Customers
+@enduml
