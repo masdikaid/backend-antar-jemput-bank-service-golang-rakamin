@@ -12,5 +12,6 @@ func SetupRoutes(app *fiber.App) {
 
 	// declare route
 	apiroute.Get("/", api.Index)
+	apiroute.Get("/login", api.Login)
 
 }

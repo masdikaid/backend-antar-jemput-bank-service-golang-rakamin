@@ -11,7 +11,7 @@ func Login(c *fiber.Ctx) error {
 		Message string `json:"message"`
 	}{
 		Status:  fiber.StatusOK,
-		Message: "Success Access OK",
+		Message: "Success Access",
 	}
 	return c.JSON(response)
 }
