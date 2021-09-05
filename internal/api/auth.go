@@ -11,7 +11,18 @@ func Login(c *fiber.Ctx) error {
 		Message string `json:"message"`
 	}{
 		Status:  fiber.StatusOK,
-		Message: "Success Access",
+		Message: "berhasil login",
+	}
+	return c.JSON(response)
+}
+
+func Logout(c *fiber.Ctx) error {
+	response := struct {
+		Status  int    `json:"status"`
+		Message string `json:"message"`
+	}{
+		Status:  fiber.StatusOK,
+		Message: "Berhasil logout",
 	}
 	return c.JSON(response)
 }
