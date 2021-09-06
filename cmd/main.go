@@ -2,11 +2,11 @@ package main
 
 import (
 	// project import
-	_ "bri-antar-jemput/config"
-	"bri-antar-jemput/internal/models"
-	"bri-antar-jemput/internal/route"
-	"bri-antar-jemput/tools/migration"
-	"fmt"
+	_ "backend-a-antar-jemput/config"
+	//"backend-a-antar-jemput/internal/models"
+	"backend-a-antar-jemput/internal/route"
+	"backend-a-antar-jemput/tools/migration"
+	//"fmt"
 
 	// default import
 	"log"
@@ -31,8 +31,8 @@ func main() {
 			log.Fatalln("argument not found !")
 		}
 	} else {
-		a := models.Location{}
-		fmt.Println(a.GetLocationByLogin())
+		// a := models.Location{}
+		// fmt.Println(a.GetLocationByLogin())
 
 		// setup fiber app
 		app := SetupFiber()
