@@ -22,10 +22,16 @@ import (
 
 type Transaction struct{
 	gorm.Model
+	CustomersID uint
+	Customers Customers
+	AgentsID uint
+	Agents Agents
+	LocationID uint
+	Location Location
 	Tipe string
 	Amount int
 	Status int
-	//Rating float64
+	Rating float64
 	//id int
 	//customerId customer
 	//agetId Agent

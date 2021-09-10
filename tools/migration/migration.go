@@ -10,5 +10,5 @@ func RunMigrate() {
 	databases.Load()
 
 	// run migration with gorm
-	databases.DBCon.AutoMigrate(&models.Transaction{})
+	databases.DBCon.AutoMigrate(&models.Login{},&models.Users{},&models.Customers{},&models.Agents{},&models.Location{},&models.Transaction{})
 }

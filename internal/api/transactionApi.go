@@ -29,3 +29,14 @@ func GetAllTransactions(c *fiber.Ctx) error {
 	}
 	return c.JSON(trx)
 }
+
+func GetAllTransactionsCust(c *fiber.Ctx) error  {
+	var trx []contract.TransactionCust
+	var err error
+	cust := c.Params("id")
+	trx = service.GetAllTransactionsCust(cust)
+	if err != nil {
+		panic(err)
+	}
+	return c.JSON(trx)
+}

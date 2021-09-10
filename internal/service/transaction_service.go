@@ -65,3 +65,31 @@ func GetAllTransactions() []contract.Transaction {
 
 	//return trxResponse
 }
+
+func GetAllTransactionsCust(cust string) []contract.TransactionCust  {
+	trx, err := repository.GetAllTransactionsCust(cust)
+	
+	if err != nil {
+		// resp := contract.TransactionResponse{
+		// 	Status: 400,
+		// 	Message: err.Error(),
+		panic(err.Error())
+	}
+	var trxResponse []contract.TransactionCust
+	// resp := contract.TransactionResponse{
+	// 	Status: ,
+	// }
+	for _, v := range trx {
+		t := contract.TransactionCust{
+			Status: v.Status,
+			Tipe: v.Tipe,
+			Amount: v.Amount,
+			LocationID: v.LocationID,
+			AgentsID: v.AgentsID,
+			Id: v.Id,
+			CustomersID: v.CustomersID,
+		}
+		trxResponse = append(trxResponse, t)
+	}
+	return trxResponse
+}

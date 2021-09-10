@@ -11,7 +11,21 @@ type Transaction struct{
 	//locationID Location
 }
 
-type TransactionResponse struct{
-	Status int `json:status`
-	Message string `json:message`
+type TransactionCust struct{
+	Status int `json:"Status"`
+	Tipe string `json:"Tipe"`
+	Amount int `json:"nominal_transaksi_idr"`
+	LocationID uint `json:"Id Lokasi"`
+	//Location Location
+	AgentsID uint `json:"Id Agent"`
+	Id uint `json:"Id Transaksi"`
+	CustomersID uint `json:"Id Customer"`
+	//Rating float64
 }
+
+
+
+// type TransactionResponse struct{
+// 	Status int `json:status`
+// 	Message string `json:message`
+// }
