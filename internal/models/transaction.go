@@ -6,9 +6,9 @@ import (
 	"gorm.io/gorm"
 )
 
-type TransactionInterface interface{
+//type TransactionInterface interface{
 	// Create(*TransactionInterface) (TransactionInterface,error)  //1
-	GetAll() ([]TransactionInterface,error)					//2
+	//GetAll() ([]TransactionInterface,error)					//2
 	// //GetByCust()([]TransactionInterface,error)					//3
 	// //GetByAgent()([]TransactionInterface,error)				//4
 	// //GetAgentRating() float									//5
@@ -18,14 +18,14 @@ type TransactionInterface interface{
 	// Done() (TransactionInterface,error)							//9
 	// Delete() (TransactionInterface,error)						//10
 
-}
+//}
 
 type Transaction struct{
 	gorm.Model
 	Tipe string
 	Amount int
 	Status int
-	Rating float64
+	//Rating float64
 	//id int
 	//customerId customer
 	//agetId Agent

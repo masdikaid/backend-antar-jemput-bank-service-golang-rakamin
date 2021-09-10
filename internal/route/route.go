@@ -12,6 +12,6 @@ func SetupRoutes(app *fiber.App) {
 
 	// declare route
 	apiroute.Get("/", api.Index)
-	apiroute.Get("/transaksi", api.GetAll)
+	apiroute.Get("/transaksi", api.GetAllTransactions)
 
 }
