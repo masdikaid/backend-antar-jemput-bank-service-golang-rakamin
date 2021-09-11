@@ -3,6 +3,7 @@ package repository
 import (
 	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/entities"
+	"errors"
 	//"backend-a-antar-jemput/internal/models"
 	//"backend-a-antar-jemput/internal/models"
 )
@@ -30,6 +31,27 @@ func (T TransactionRepositoryMysql) GetAll() ([]*entities.Transaction, error) {
 	databases.Load()
 	res := []*entities.Transaction{}
 	err := databases.DBCon.Find(&res)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+	return res, nil
+}
+
+func (T TransactionRepositoryMysql) GetByID(tipe string, id uint) ([]*entities.Transaction, error) {
+	var query string
+	switch tipe {
+	case "cust":
+		query = "customer_id = ?"
+	case "agent":
+		query = "customer_id = ?"
+	default:
+		err := errors.New("wrong tipe")
+		return nil, err
+	}
+
+	databases.Load()
+	res := []*entities.Transaction{}
+	err := databases.DBCon.Where(query, id)
 	if err.Error != nil {
 		return nil, err.Error
 	}
