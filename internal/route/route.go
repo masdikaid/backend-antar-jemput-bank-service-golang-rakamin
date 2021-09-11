@@ -13,8 +13,8 @@ func SetupRoutes(app *fiber.App) {
 	// declare route
 	apiroute.Get("/", api.Index)
 	apiroute.Post("/transaksi/create", api.CreateTransaction)
-	apiroute.Get("/transaksi/:id_customer?", api.GetAllTransactionsByCust)
-	apiroute.Get("/transaksi", api.GetAllTransactions)
+	apiroute.Get("/transaksi/:id_customer?", api.GetTransactions)
+	apiroute.Get("/transaksi/:id_agen?", api.GetTransactions)
 	// apiroute.Get("/transaksi/:id", api.GetAllTransactionsCust)
 
 }

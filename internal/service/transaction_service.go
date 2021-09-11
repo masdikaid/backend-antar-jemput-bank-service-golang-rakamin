@@ -5,7 +5,6 @@ import (
 	"backend-a-antar-jemput/internal/entities"
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/tools/helper"
-	"fmt"
 
 	"github.com/ulule/deepcopier"
 	//"github.com/gofiber/fiber/v2"
@@ -29,7 +28,7 @@ func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.Trans
 
 	agentEnt, agentErr := agent.Repository.GetByID(ent.AgentsID)
 	custEnt, custErr := cust.Repository.GetByID(ent.CustomersID)
-	locEnt, locErr := loc.Repository.GetByCity(trans.Location.City)
+	locEnt, locErr := loc.Repository.GetByCity(trans.City)
 	if agentErr != nil || custErr != nil || locErr != nil {
 		return nil, agentErr
 	}
@@ -44,7 +43,6 @@ func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.Trans
 	}
 	contract := contract.Transaction{}
 	helper.ConvertStruct(res, &contract)
-	fmt.Println(contract.Location.City)
 	return &contract, nil
 }
 
