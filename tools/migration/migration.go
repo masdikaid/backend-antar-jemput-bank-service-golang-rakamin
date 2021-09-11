@@ -1,8 +1,8 @@
 package migration
 
 import (
-	"bri-antar-jemput/internal/databases"
-	"bri-antar-jemput/internal/models"
+	"backend-a-antar-jemput/internal/databases"
+	"backend-a-antar-jemput/internal/entities"
 )
 
 func RunMigrate() {
@@ -10,5 +10,5 @@ func RunMigrate() {
 	databases.Load()
 
 	// run migration with gorm
-	databases.DBCon.AutoMigrate(&models.Login{})
+	databases.DBCon.AutoMigrate(&entities.Login{}, &entities.Customers{}, &entities.Agents{}, &entities.Location{}, &entities.Transaction{})
 }

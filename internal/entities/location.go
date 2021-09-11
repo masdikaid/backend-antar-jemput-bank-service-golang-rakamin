@@ -1,4 +1,4 @@
-package models
+package entities
 
 import "gorm.io/gorm"
 
@@ -9,13 +9,14 @@ type LocationInterface interface {
 
 type Location struct {
 	gorm.Model
-	CreateById Login
-	Address    string
-	Province   string
-	City       string
-	District   string
-	Latitude   float64
-	Longitude  float64
+	LoginID   uint
+	Login     Login
+	Address   string
+	Province  string
+	City      string
+	District  string
+	Latitude  float64
+	Longitude float64
 }
 
 func (l *Location) Create() (*Location, error) {
