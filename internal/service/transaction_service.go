@@ -22,24 +22,21 @@ type ServiceTrasaction struct {
 func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.Transaction, error) {
 	ent := entities.Transaction{}
 	helper.ConvertStruct(trans, &ent)
-	agentRepo := repository.AgentRepositoryMysql{}
-	agent, errr := agentRepo.GetByID(ent.AgentsID)
-	if errr != nil {
-		return nil, errr
+
+	agent := ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
+	cust := ServiceCustomer{Repository: repository.CustomerRepositoryMysql{}}
+	loc := ServiceLocation{Repository: repository.LocationRepositoryMysql{}}
+
+	agentEnt, agentErr := agent.Repository.GetByID(ent.AgentsID)
+	custEnt, custErr := cust.Repository.GetByID(ent.CustomersID)
+	locEnt, locErr := loc.Repository.GetByCity(trans.Location.City)
+	if agentErr != nil || custErr != nil || locErr != nil {
+		return nil, agentErr
 	}
-	customerRepo := repository.CustomerRepositoryMysql{}
-	customer, errr := customerRepo.GetByID(ent.CustomersID)
-	if errr != nil {
-		return nil, errr
-	}
-	locationRepo := repository.LocationRepositoryMysql{}
-	location, errr := locationRepo.GetByCity(trans.City)
-	if errr != nil {
-		return nil, errr
-	}
-	ent.Agents = *agent
-	ent.Customers = *customer
-	ent.Location = *location
+
+	ent.Agents = *agentEnt
+	ent.Customers = *custEnt
+	ent.Location = *locEnt
 
 	res, err := S.Repository.Create(&ent)
 	if err != nil {
