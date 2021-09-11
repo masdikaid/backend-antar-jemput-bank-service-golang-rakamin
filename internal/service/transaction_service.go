@@ -2,94 +2,65 @@ package service
 
 import (
 	"backend-a-antar-jemput/internal/contract"
+	"backend-a-antar-jemput/internal/entities"
 	"backend-a-antar-jemput/internal/repository"
+	"backend-a-antar-jemput/tools/helper"
+	"fmt"
 
+	"github.com/ulule/deepcopier"
 	//"github.com/gofiber/fiber/v2"
 	//"go/constant"
 )
 
-func GetAllTransactions() []contract.Transaction {
-	// allTrx, err := repository.GetAllTransactions()
-	// if err != nil {
-	// 	resp := contract.Transaction{
-	// 		Status: 400,
-	// 		Message: err.Error(),
-	// 	}
-	// }
-	// resp := contract.Transaction{
-	// 	Tipe: tipe,
-	// 	Amount: amount,
-	// 	Status: status,
-	// 	Rating: rating,
-	// }
-	trx, err := repository.GetAllTransactions()
-	
-	if err != nil {
-		// resp := contract.TransactionResponse{
-		// 	Status: 400,
-		// 	Message: err.Error(),
-		panic(err.Error())
-	}
-	var trxResponse []contract.Transaction
-	// resp := contract.TransactionResponse{
-	// 	Status: ,
-	// }
-	for _, v := range trx {
-		t := contract.Transaction{
-			Tipe:   v.Tipe,
-			Amount: v.Amount,
-			Status: v.Status,
-		}
-		trxResponse = append(trxResponse, t)
-	}
-	return trxResponse
-
-	// if err != nil {
-	// 	trxResponse := contract.TransactionResponse{
-	// 		Status:  400,
-	// 		Message: err.Error(),
-	// 	}
-	// } else {
-	// 	var trxResponse []contract.Transaction
-	// 	for _, v := range trx {
-	// 		t := contract.Transaction{
-	// 			Tipe:   v.Tipe,
-	// 			Amount: v.Amount,
-	// 			Status: v.Status,
-	// 			Rating: v.Rating,
-	// 		}
-	// 		trxResponse = append(trxResponse, t)
-	// 	}
-	// 	return trxResponse
-	// }
-
-	//return trxResponse
+type ServiceTrasactionInterface interface {
 }
 
-func GetAllTransactionsCust(cust string) []contract.TransactionCust  {
-	trx, err := repository.GetAllTransactionsCust(cust)
-	
+type ServiceTrasaction struct {
+	Repository repository.TransactionRepositoryInterface
+}
+
+func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.Transaction, error) {
+	ent := entities.Transaction{}
+	helper.ConvertStruct(trans, &ent)
+	agentRepo := repository.AgentRepositoryMysql{}
+	agent, errr := agentRepo.GetByID(ent.AgentsID)
+	if errr != nil {
+		return nil, errr
+	}
+	customerRepo := repository.CustomerRepositoryMysql{}
+	customer, errr := customerRepo.GetByID(ent.CustomersID)
+	if errr != nil {
+		return nil, errr
+	}
+	locationRepo := repository.LocationRepositoryMysql{}
+	location, errr := locationRepo.GetByCity(trans.City)
+	if errr != nil {
+		return nil, errr
+	}
+	ent.Agents = *agent
+	ent.Customers = *customer
+	ent.Location = *location
+
+	res, err := S.Repository.Create(&ent)
 	if err != nil {
-		// resp := contract.TransactionResponse{
-		// 	Status: 400,
-		// 	Message: err.Error(),
-		panic(err.Error())
+		return nil, err
 	}
-	var trxResponse []contract.TransactionCust
-	// resp := contract.TransactionResponse{
-	// 	Status: ,
-	// }
-	for _, v := range trx {
-		t := contract.TransactionCust{
-			Status: v.Status,
-			Tipe: v.Tipe,
-			Amount: v.Amount,
-			LocationID: v.LocationID,
-			AgentsID: v.AgentsID,
-			Id: v.Id,
-			CustomersID: v.CustomersID,
-		}
-		trxResponse = append(trxResponse, t)
+	contract := contract.Transaction{}
+	helper.ConvertStruct(res, &contract)
+	fmt.Println(contract.Location.City)
+	return &contract, nil
+}
+
+func (S *ServiceTrasaction) GetAll() ([]*contract.Transaction, error) {
+	res, err := S.Repository.GetAll()
+	if err != nil {
+		return nil, err
 	}
-	return trxResponse
+	var contractList []*contract.Transaction
+	for _, v := range res {
+		contract := contract.Transaction{}
+		deepcopier.Copy(v).To(&contract)
+		contractList = append(contractList, &contract)
+	}
+	return contractList, nil
 }
