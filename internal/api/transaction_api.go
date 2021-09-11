@@ -38,7 +38,7 @@ func GetAllTransactions(c *fiber.Ctx) error {
 }
 
 func GetAllTransactionsByCust(c *fiber.Ctx) error {
-	id := c.Query("id")
+	id := c.Query("id_customer")
 	parsed, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
 		c.SendString("id not int")
