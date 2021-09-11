@@ -14,6 +14,7 @@ func SetupRoutes(app *fiber.App) {
 	apiroute.Get("/", api.Index)
 	apiroute.Post("/transaksi/create", api.CreateTransaction)
 	apiroute.Get("/transaksi/:id_customer?", api.GetAllTransactionsByCust)
+	apiroute.Get("/transaksi/:id_agent?",api.GetAllTransactionsByAgent)
 	apiroute.Get("/transaksi", api.GetAllTransactions)
 	// apiroute.Get("/transaksi/:id", api.GetAllTransactionsCust)
 

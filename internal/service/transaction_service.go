@@ -75,3 +75,17 @@ func (S *ServiceTrasaction) GetByCustID(id uint) ([]*contract.Transaction, error
 	}
 	return contractList, nil
 }
+
+func (S *ServiceTrasaction) GetByAgentID(id uint) ([]*contract.Transaction, error)  {
+	res, err := S.Repository.GetAllByID("agent", id)
+	if err != nil {
+		return nil, err
+	}
+	var contractList []*contract.Transaction
+	for _, v := range res {
+		contract := contract.Transaction{}
+		deepcopier.Copy(v).To(&contract)
+		contractList = append(contractList, &contract)
+	}
+	return contractList, nil
+}

@@ -52,6 +52,21 @@ func GetAllTransactionsByCust(c *fiber.Ctx) error {
 	return c.JSON(res)
 }
 
+func GetAllTransactionsByAgent(c *fiber.Ctx) error  {
+	id := c.Query("id_agent")
+	parsed, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		c.SendString("id not int")
+		return err
+	}
+	res, err := Service.GetByAgentID(uint(parsed))
+	if err != nil {
+		c.SendString("not found")
+		return err
+	}
+	return c.JSON(res)
+}
+
 // func GetAllTransactions(c *fiber.Ctx) error {
 // 	// response := struct {
 // 	// 	Status  int    `json:"status"`
