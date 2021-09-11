@@ -9,8 +9,9 @@ import (
 )
 
 type TransactionRepositoryInterface interface {
-	Create(ent *entities.Transaction) (*entities.Transaction, error) //1
-	GetAll() ([]*entities.Transaction, error)                        //1
+	Create(ent *entities.Transaction) (*entities.Transaction, error)  //1
+	GetAll() ([]*entities.Transaction, error)                         //1
+	GetAllByID(tipe string, id uint) ([]*entities.Transaction, error) //1
 	// Update() (*entities.Transaction, error)                      //1
 	// Delete() error                                               //10
 }
@@ -37,7 +38,7 @@ func (T TransactionRepositoryMysql) GetAll() ([]*entities.Transaction, error) {
 	return res, nil
 }
 
-func (T TransactionRepositoryMysql) GetByID(tipe string, id uint) ([]*entities.Transaction, error) {
+func (T TransactionRepositoryMysql) GetAllByID(tipe string, id uint) ([]*entities.Transaction, error) {
 	var query string
 	switch tipe {
 	case "cust":
