@@ -2,7 +2,7 @@
 An App named Antar-Jemput BRI Link that can help you more fun in live
 
 # How To Use
-this is the simple ways how to use
+this is the simple ways how to use the App
 building App :
 
 ```go buid -o ./app cmd/main.go```
