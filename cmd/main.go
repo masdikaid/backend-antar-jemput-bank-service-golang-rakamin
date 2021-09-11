@@ -6,6 +6,8 @@ import (
 	//"backend-a-antar-jemput/internal/models"
 	"backend-a-antar-jemput/internal/route"
 	"backend-a-antar-jemput/tools/migration"
+	"backend-a-antar-jemput/tools/seeds"
+
 	//"fmt"
 
 	// default import
@@ -26,7 +28,7 @@ func main() {
 		case "db:migrate":
 			migration.RunMigrate()
 		case "db:seeds":
-			log.Fatalln("great, this feature under developing !")
+			seeds.RunSeeds()
 		default:
 			log.Fatalln("argument not found !")
 		}
