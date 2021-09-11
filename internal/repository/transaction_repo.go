@@ -42,9 +42,9 @@ func (T TransactionRepositoryMysql) GetAllByID(tipe string, id uint) ([]*entitie
 	var query string
 	switch tipe {
 	case "cust":
-		query = "customer_id = ?"
+		query = "customers_id = ?"
 	case "agent":
-		query = "agent_id = ?"
+		query = "agents_id = ?"
 	default:
 		err := errors.New("wrong tipe")
 		return nil, err
@@ -52,7 +52,7 @@ func (T TransactionRepositoryMysql) GetAllByID(tipe string, id uint) ([]*entitie
 
 	databases.Load()
 	res := []*entities.Transaction{}
-	err := databases.DBCon.Where(query, id).Find(res)
+	err := databases.DBCon.Where(query, id).Find(&res)
 	if err.Error != nil {
 		return nil, err.Error
 	}
