@@ -6,6 +6,7 @@ import (
 	"backend-a-antar-jemput/internal/contract"
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/internal/service"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -29,6 +30,21 @@ func CreateTransaction(c *fiber.Ctx) error {
 
 func GetAllTransactions(c *fiber.Ctx) error {
 	res, err := Service.GetAll()
+	if err != nil {
+		c.SendString("not found")
+		return err
+	}
+	return c.JSON(res)
+}
+
+func GetAllTransactionsByCust(c *fiber.Ctx) error {
+	id := c.Query("id")
+	parsed, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		c.SendString("id not int")
+		return err
+	}
+	res, err := Service.GetByCustID(uint(parsed))
 	if err != nil {
 		c.SendString("not found")
 		return err
