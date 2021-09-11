@@ -43,7 +43,7 @@ func (T TransactionRepositoryMysql) GetByID(tipe string, id uint) ([]*entities.T
 	case "cust":
 		query = "customer_id = ?"
 	case "agent":
-		query = "customer_id = ?"
+		query = "agent_id = ?"
 	default:
 		err := errors.New("wrong tipe")
 		return nil, err
@@ -51,7 +51,7 @@ func (T TransactionRepositoryMysql) GetByID(tipe string, id uint) ([]*entities.T
 
 	databases.Load()
 	res := []*entities.Transaction{}
-	err := databases.DBCon.Where(query, id)
+	err := databases.DBCon.Where(query, id).Find(res)
 	if err.Error != nil {
 		return nil, err.Error
 	}
