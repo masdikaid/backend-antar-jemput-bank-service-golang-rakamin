@@ -5,7 +5,7 @@ An App named Antar-Jemput BRI Link that can help you more fun in live
 this is the simple ways how to use
 building App :
 
-```go buid cmd/main.go```
+```go buid -o ./app cmd/main.go```
 
 migrating database :
 
