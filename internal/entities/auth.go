@@ -1,7 +1,7 @@
 package entities
 
 import (
-	"time"
+	"database/sql"
 
 	"gorm.io/gorm"
 )
@@ -11,5 +11,5 @@ type Login struct {
 	Username  string
 	Password  string
 	LoginAs   int
-	LastLogin time.Time
+	LastLogin sql.NullTime
 }
