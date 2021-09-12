@@ -43,6 +43,8 @@ func (t *Transaction) ToEntity() *entities.Transaction {
 	helper.ConvertStruct(t, ent)
 	ent.Amount = t.Amount
 	ent.Tipe = t.Tipe
+	ent.AgentsID = t.AgentsID
+	ent.CustomersID = t.CustomersID
 	ent.Location.Province = t.Province
 	ent.Location.City = t.City
 	ent.Location.District = t.District

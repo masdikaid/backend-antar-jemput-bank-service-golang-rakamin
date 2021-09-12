@@ -17,8 +17,6 @@ type ServiceTrasaction struct {
 
 func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.Transaction, error) {
 	ent := trans.ToEntity()
-	println(ent.Amount)
-	println(ent.Tipe)
 
 	agent := ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
 	cust := ServiceCustomer{Repository: repository.CustomerRepositoryMysql{}}
