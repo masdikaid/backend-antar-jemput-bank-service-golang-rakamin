@@ -1,5 +1,10 @@
 package contract
 
+import (
+	"backend-a-antar-jemput/internal/entities"
+	"backend-a-antar-jemput/tools/helper"
+)
+
 // type Transaction struct{
 // 	Tipe string `json:"jenis_transaksi"`
 // 	Amount int `json:"nominal_transaksi_idr"`
@@ -16,13 +21,33 @@ type Transaction struct {
 	CustomersID uint    `json:"id_cust"`
 	Tipe        string  `json:"jenis_transaksi"`
 	Amount      int     `json:"nominal_transaksi_idr"`
-	Province    string  `json:"alamat_cust_provinsi" deepcopier:"field:Location.Province"`
-	City        string  `json:"alamat_cust_kabko" deepcopier:"field:Location.City"`
-	District    string  `json:"alamat_cust_kecamatan" deepcopier:"field:Location.District"`
-	Address     string  `json:"alamat_cust_lengkap" deepcopier:"field:Location.Address"`
+	Province    string  `json:"alamat_cust_provinsi"`
+	City        string  `json:"alamat_cust_kabko"`
+	District    string  `json:"alamat_cust_kecamatan"`
+	Address     string  `json:"alamat_cust_lengkap"`
 	AgentsID    uint    `json:"id_agen"`
-	Id          uint    `json:"id_transaksi"`
+	ID          uint    `json:"id_transaksi"`
 	Rating      float64 `json:"rating"`
+}
+
+func (t *Transaction) FromEntity(source *entities.Transaction) {
+	helper.ConvertStruct(source, t)
+	t.Province = source.Location.Province
+	t.City = source.Location.City
+	t.District = source.Location.District
+	t.Address = source.Location.Address
+}
+
+func (t *Transaction) ToEntity() *entities.Transaction {
+	ent := entities.Transaction{}
+	helper.ConvertStruct(t, ent)
+	ent.Amount = t.Amount
+	ent.Tipe = t.Tipe
+	ent.Location.Province = t.Province
+	ent.Location.City = t.City
+	ent.Location.District = t.District
+	ent.Location.Address = t.Address
+	return &ent
 }
 
 // "jenis_transaksi": "Setoran Pinjaman",
