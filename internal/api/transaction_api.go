@@ -24,8 +24,7 @@ func CreateTransaction(c *fiber.Ctx) error {
 		c.SendString("not found")
 		return errr
 	}
-	status := fiber.StatusCreated
-	return c.Status(status).JSON(helper.ResponseBuilder(status, "Created", res))
+	return helper.JsonResponseOkBuilder(c, fiber.StatusCreated, "created", res)
 }
 
 func GetTransactions(c *fiber.Ctx) error {
@@ -34,7 +33,6 @@ func GetTransactions(c *fiber.Ctx) error {
 	var err error
 	custID, _ := strconv.ParseUint(c.Query("id_customer"), 10, 64)
 	agentID, _ := strconv.ParseUint(c.Query("id_agen"), 10, 64)
-
 	switch {
 	case custID != 0:
 		res, err = Service.GetByCustID(uint(custID))
@@ -47,6 +45,5 @@ func GetTransactions(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("not found")
 	}
-	status := fiber.StatusOK
-	return c.Status(status).JSON(helper.ResponseBuilder(status, "Sukses", res))
+	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", res)
 }
