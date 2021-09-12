@@ -3,8 +3,6 @@ package repository
 import (
 	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/entities"
-
-	"gorm.io/gorm"
 )
 
 type AgentRepositoryInterface interface {
@@ -18,9 +16,9 @@ type AgentRepositoryMysql struct {
 }
 
 func (usr AgentRepositoryMysql) GetByID(id uint) (*entities.Agents, error) {
-	ent := entities.Agents{Users: entities.Users{Model: gorm.Model{ID: id}}}
+	ent := entities.Agents{}
 	databases.Load()
-	err := databases.DBCon.First(&ent)
+	err := databases.DBCon.Preload("Login").First(&ent, id)
 	if err.Error != nil {
 		return nil, err.Error
 	}
