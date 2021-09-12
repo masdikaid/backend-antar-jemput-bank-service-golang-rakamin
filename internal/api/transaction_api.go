@@ -36,6 +36,7 @@ func GetTransactions(c *fiber.Ctx) error {
 	case custID != 0:
 		res, err = Service.GetByCustID(uint(custID))
 	case agentID != 0:
+		res, err = Service.GetByAgentID(uint(agentID))
 		// code for agent
 	default:
 		res, err = Service.GetAll()
@@ -46,3 +47,69 @@ func GetTransactions(c *fiber.Ctx) error {
 	}
 	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", res)
 }
+
+func ConfirmTransactions(c *fiber.Ctx) error {
+	type confirm struct {
+		ID uint `json:"id_transaksi"`
+	}
+
+	idTrx := confirm{}
+	err := c.BodyParser(&idTrx)
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	res, err := Service.SetStatus(idTrx.ID,1)
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", res)
+}
+
+func CancelTransactions(c *fiber.Ctx) error {
+	type confirm struct {
+		ID uint `json:"id_transaksi"`
+	}
+
+	idTrx := confirm{}
+	err := c.BodyParser(&idTrx)
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	res, err := Service.SetStatus(idTrx.ID,2)
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", res)
+}
+
+func FinishTransactions(c *fiber.Ctx) error {
+	type confirm struct {
+		ID uint `json:"id_transaksi"`
+	}
+
+	idTrx := confirm{}
+	err := c.BodyParser(&idTrx)
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	res, err := Service.SetStatus(idTrx.ID,3)
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", res)
+}
+
+func DeleteTransactions(c *fiber.Ctx) error {
+	idTrx,err := c.ParamsInt("id")
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	err = Service.Delete(uint(idTrx))
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Deleted", nil)
+}
+
+
+

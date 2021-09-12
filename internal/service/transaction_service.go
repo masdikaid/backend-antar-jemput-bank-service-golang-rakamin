@@ -74,7 +74,7 @@ func (S *ServiceTrasaction) GetByCustID(id uint) ([]*contract.Transaction, error
 	return contractList, nil
 }
 
-func (S *ServiceTrasaction) GetByAgentID(id uint) ([]*contract.Transaction, error)  {
+func (S *ServiceTrasaction) GetByAgentID(id uint) ([]*contract.Transaction, error) {
 	res, err := S.Repository.GetAllByID("agent", id)
 	if err != nil {
 		return nil, err
@@ -86,4 +86,34 @@ func (S *ServiceTrasaction) GetByAgentID(id uint) ([]*contract.Transaction, erro
 		contractList = append(contractList, &contract)
 	}
 	return contractList, nil
+}
+
+func (S *ServiceTrasaction) SetStatus(id uint, status int) (*contract.Transaction, error) {
+	res, err := S.Repository.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+	res.Status = status
+
+	res, errr := S.Repository.Update(res)
+	if errr != nil {
+		return nil, errr
+	}
+	contract := contract.Transaction{}
+	helper.ConvertStruct(res, &contract)
+	return &contract, nil
+}
+
+func (S *ServiceTrasaction) Delete(id uint) error {
+	res, err := S.Repository.GetByID(id)
+	if err != nil {
+		return err
+	}
+	res, errr := S.Repository.Delete(res)
+	if errr != nil {
+		return errr
+	}
+	contract := contract.Transaction{}
+	helper.ConvertStruct(res, &contract)
+	return nil
 }

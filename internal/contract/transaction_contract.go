@@ -21,7 +21,7 @@ type Transaction struct {
 	District    string  `json:"alamat_cust_kecamatan" deepcopier:"field:Location.District"`
 	Address     string  `json:"alamat_cust_lengkap" deepcopier:"field:Location.Address"`
 	AgentsID    uint    `json:"id_agen"`
-	Id          uint    `json:"id_transaksi"`
+	ID          uint    `json:"id_transaksi"`
 	Rating      float64 `json:"rating"`
 }
 
