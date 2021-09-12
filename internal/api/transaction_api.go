@@ -1,11 +1,10 @@
 package api
 
 import (
-	//"backend-a-antar-jemput/internal/models"
-
 	"backend-a-antar-jemput/internal/contract"
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/internal/service"
+	"backend-a-antar-jemput/tools/helper"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -17,69 +16,33 @@ func CreateTransaction(c *fiber.Ctx) error {
 	var t *contract.Transaction
 	err := c.BodyParser(&t)
 	if err != nil {
-		c.SendString("not found")
-		return err
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, "bad request")
 	}
 	res, errr := Service.Create(t)
 	if errr != nil {
-		c.SendString("not found")
-		return errr
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, errr.Error())
 	}
-	return c.JSON(res)
+	return helper.JsonResponseOkBuilder(c, fiber.StatusCreated, "created", res)
 }
 
-func GetAllTransactions(c *fiber.Ctx) error {
-	res, err := Service.GetAll()
-	if err != nil {
-		c.SendString("not found")
-		return err
+func GetTransactions(c *fiber.Ctx) error {
+
+	var res []*contract.Transaction
+	var err error
+	custID, _ := strconv.ParseUint(c.Query("id_customer"), 10, 64)
+	agentID, _ := strconv.ParseUint(c.Query("id_agen"), 10, 64)
+
+	switch {
+	case custID != 0:
+		res, err = Service.GetByCustID(uint(custID))
+	case agentID != 0:
+		// code for agent
+	default:
+		res, err = Service.GetAll()
 	}
-	return c.JSON(res)
+
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", res)
 }
-
-func GetAllTransactionsByCust(c *fiber.Ctx) error {
-	id := c.Query("id_customer")
-	parsed, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		c.SendString("id not int")
-		return err
-	}
-	res, err := Service.GetByCustID(uint(parsed))
-	if err != nil {
-		c.SendString("not found")
-		return err
-	}
-	return c.JSON(res)
-}
-
-// func GetAllTransactions(c *fiber.Ctx) error {
-// 	// response := struct {
-// 	// 	Status  int    `json:"status"`
-// 	// 	Message string `json:"message"`
-// 	// }{
-// 	// 	Status:  fiber.StatusOK,
-// 	// 	Message: "Success Access Transaksi Ok",
-// 	// }
-// 	// return c.JSON(response)
-// 	var trx []contract.Transaction
-// 	var err error
-// 	trx = service.GetAllTransactions()
-// 	//var err error
-// 	//x := models.GetAll()
-// 	//trx,err = x,nil
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return c.JSON(trx)
-// }
-
-// func GetAllTransactionsCust(c *fiber.Ctx) error  {
-// 	var trx []contract.TransactionCust
-// 	var err error
-// 	cust := c.Params("id")
-// 	trx = service.GetAllTransactionsCust(cust)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return c.JSON(trx)
-// }

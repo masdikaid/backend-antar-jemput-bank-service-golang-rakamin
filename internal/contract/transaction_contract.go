@@ -1,7 +1,5 @@
 package contract
 
-import "backend-a-antar-jemput/internal/entities"
-
 // type Transaction struct{
 // 	Tipe string `json:"jenis_transaksi"`
 // 	Amount int `json:"nominal_transaksi_idr"`
@@ -14,16 +12,14 @@ import "backend-a-antar-jemput/internal/entities"
 // }
 
 type Transaction struct {
-	Status      int    `json:"status"`
-	CustomersID uint   `json:"id_cust"`
-	Tipe        string `json:"jenis_transaksi"`
-	Amount      int    `json:"nominal_transaksi_idr"`
-	Province    string `json:"alamat_cust_provinsi"`
-	City        string `json:"alamat_cust_kabko"`
-	District    string `json:"alamat_cust_kecamatan"`
-	Address     string `json:"alamat_cust_lengkap"`
-	LocationID  uint   `json:"Id Lokasi"`
-	Location    entities.Location
+	Status      int     `json:"status"`
+	CustomersID uint    `json:"id_cust"`
+	Tipe        string  `json:"jenis_transaksi"`
+	Amount      int     `json:"nominal_transaksi_idr"`
+	Province    string  `json:"alamat_cust_provinsi" deepcopier:"field:Location.Province"`
+	City        string  `json:"alamat_cust_kabko" deepcopier:"field:Location.City"`
+	District    string  `json:"alamat_cust_kecamatan" deepcopier:"field:Location.District"`
+	Address     string  `json:"alamat_cust_lengkap" deepcopier:"field:Location.Address"`
 	AgentsID    uint    `json:"id_agen"`
 	Id          uint    `json:"id_transaksi"`
 	Rating      float64 `json:"rating"`
