@@ -34,7 +34,7 @@ func (T TransactionRepositoryMysql) Create(ent *entities.Transaction) (*entities
 func (T TransactionRepositoryMysql) GetAll() ([]*entities.Transaction, error) {
 	databases.Load()
 	res := []*entities.Transaction{}
-	err := databases.DBCon.Find(&res)
+	err := databases.DBCon.Preload("Location").Find(&res)
 	if err.Error != nil {
 		return nil, err.Error
 	}
@@ -55,88 +55,39 @@ func (T TransactionRepositoryMysql) GetAllByID(tipe string, id uint) ([]*entitie
 
 	databases.Load()
 	res := []*entities.Transaction{}
-	err := databases.DBCon.Where(query, id).Find(&res)
+	err := databases.DBCon.Preload("Location").Where(query, id).Find(&res)
 	if err.Error != nil {
 		return nil, err.Error
 	}
 	return res, nil
 }
 
-func (T TransactionRepositoryMysql) Update(ent *entities.Transaction) (*entities.Transaction, error)  {
+func (T TransactionRepositoryMysql) Update(ent *entities.Transaction) (*entities.Transaction, error) {
 	databases.Load()
 	err := databases.DBCon.Save(ent)
 	if err.Error != nil {
 		return nil, err.Error
 	}
-	return ent,nil
-	
+	return ent, nil
+
 }
 
-func (T TransactionRepositoryMysql) Delete(ent *entities.Transaction) (*entities.Transaction, error)  {
+func (T TransactionRepositoryMysql) Delete(ent *entities.Transaction) (*entities.Transaction, error) {
 	databases.Load()
 	err := databases.DBCon.Delete(ent)
 	if err.Error != nil {
 		return nil, err.Error
 	}
-	return ent,nil
-	
+	return ent, nil
+
 }
 
 func (T TransactionRepositoryMysql) GetByID(id uint) (*entities.Transaction, error) {
 	ent := entities.Transaction{}
 	databases.Load()
-	err := databases.DBCon.Where("id = ?",id).First(&ent)
+	err := databases.DBCon.Preload("Location").Where("id = ?", id).First(&ent)
 	if err.Error != nil {
 		return nil, err.Error
 	}
-	return &ent,nil
+	return &ent, nil
 }
-
-// func GetAllTransactions() ([]contract.Transaction,error) {
-// 	// var trx []models.Transaction
-// 	// databases.DBCon.Find(&trx)
-// 	// return trx
-
-// 	databases.Load()
-// 	var trx = contract.Transaction{}
-// 	var result []contract.Transaction
-
-// 	rows, err := databases.DBCon.Table("transactions").Select("transactions.tipe,transactions.amount,transactions.status").Rows()
-// 	if err!=nil {
-// 		return nil,err
-// 	}
-
-// 	for rows.Next(){
-// 		err := rows.Scan(&trx.Tipe,&trx.Amount,&trx.Status)
-// 		if err != nil{
-// 			return nil,err
-// 		}
-// 		result = append(result, trx)
-// 	}
-// 	return result,nil
-
-// }
-
-// func GetAllTransactionsCust(customer_id string) ([]contract.TransactionCust,error)  {
-// 	databases.Load()
-// 	var trxcust = contract.TransactionCust{}
-// 	var result []contract.TransactionCust
-
-// 	rows,err  := databases.DBCon.Table("transactions").
-// 				Select("transactions.status,transactions.tipe,transactions.amount,locations.province,locations.city,locations.district,locations.address,transactions.id,customers.customer_id").
-// 				Joins("join locations on locations.id=transactions.location_id").
-// 				Joins("join  customers on customers.login_id = locations.login_id").
-// 				Where("transactions.customers_id = ?", customer_id).Rows()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	for rows.Next(){
-// 		err := rows.Scan(&trxcust.Status,)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		result = append(result, trxcust)
-// 	}
-// 	return result,nil
-// }
