@@ -73,7 +73,7 @@ func (SessionRepositoryMysql) Create(ent *entities.Session) error {
 }
 
 func (SessionRepositoryMysql) Delete(ent *entities.Session) error {
-	err := databases.DBCon.Delete(&ent)
+	err := databases.DBCon.Where(ent).Delete(&ent)
 	if err.Error != nil {
 		return err.Error
 	}
