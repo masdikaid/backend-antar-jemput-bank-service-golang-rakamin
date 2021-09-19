@@ -2,17 +2,18 @@ package route
 
 import (
 	"backend-a-antar-jemput/internal/api"
+	"backend-a-antar-jemput/internal/midleware"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func SetupRoutes(app *fiber.App) {
 	// create route group api
-	apiroute := app.Group("")
+	app.Post("/login", api.Login)
+	apiroute := app.Group("", midleware.AuthMiddleware())
 
 	// declare route
 	apiroute.Get("/", api.Index)
-	apiroute.Get("/login", api.Login)
 	apiroute.Get("/logout", api.Logout)
 	apiroute.Get("/transaksi", api.GetTransactions)
 	apiroute.Post("/transaksi/create", api.CreateTransaction)
