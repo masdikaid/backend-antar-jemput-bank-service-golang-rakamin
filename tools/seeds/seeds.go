@@ -7,8 +7,8 @@ import (
 
 func RunSeeds() {
 	logins := []*entities.Login{
-		{},
-		{},
+		{Username: "masdikaid", Password: "masdika00", LoginAs: 1},
+		{Username: "masdika", Password: "masdika00", LoginAs: 1},
 		{},
 		{},
 	}

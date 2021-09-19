@@ -1,19 +1,57 @@
 @startuml
 
+
 package Transaction <<folder>> {
 
-    interface TransactionInterface {
-        Create(*TransactionInterface) (TransactionInterface, error)
-        GetAll() ([]TransactionInterface, error)
-        GetByCust(Customer) ([]TransactionInterface, error)
-        GetByAgent(Agent) ([]TransactionInterface, error)
-        GetAgentRating(Agent) Float
-        GetByID(int) (TransactionInterface, error)
-        Confirm() (TransactionInterface, error)
-        Cancel() (TransactionInterface, error)
-        Done() (TransactionInterface, error)
-        Delete() (TransactionInterface, error)
+    class TransactionEntity {
+        ID : uint
+        CreatedAt : time
+        UpdatedAt : time
+        DeletedAt : time
+        Customer_id : uint
+        Customer : CustomerEntity
+        Agent_id : uint
+        Agent : AgentEntity
+        Address : string
+        Province : string
+        City : string
+        District : string
+        Latitude : decimal
+        Longitude : decimal
+        Services : string
+        Type : string
+        Amount : uint
+        Status : uint
+        Rating : uint
     }
+
+    interface TransactionContractInterface {
+        FromEntity(ent TransactionEntity) TransactionContractInterface
+        ToEntity() TransactionEntity
+    }
+
+    class TransactionContract {
+        ID : uint `json:"id_transaksi"`
+        Status : int `json:"status"`
+        CreatedAt : time `json:"created_at"`
+        Services : string `json:"jenis_layanan"`
+        Type : string `json:"jenis_transaksi"`
+        Amount : uint `json:"nominal_transaksi_idr"`
+        Rating : uint `json:"rating"`
+        Agent : AgentContract `json:"agen"`
+        Customer : CustomerContract `json:"customer"`
+    }
+
+    interface TransactionRepositoryInterface {
+        GetAll() []*TransactionEntity
+        GetAllByID(usertype string, id uint) []*TransactionEntity
+        GetByID(id uint) *TransactionEntity
+        Create(ent *TransactionEntity) *TransactionEntity
+        Update(ent *TransactionEntity) *TransactionEntity
+        Delete(ent *TransactionEntity) error
+    }
+
+
 
     class Transaction {
         id : int

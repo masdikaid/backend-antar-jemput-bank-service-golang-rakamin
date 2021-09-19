@@ -13,7 +13,7 @@ entity Sessions {
     *id : int <<PK>>
     --
     login_id : int <<FK>>
-    token : varchar unique
+    sid : varchar unique
     expired_at : datetime
 }
 
@@ -33,6 +33,9 @@ entity Agents {
     outlet_name : varchar
     name : varchar
     phone_number : varchar
+    is_available : bool
+    max_trx : int
+    rating : float
 }
 
 entity Location {
@@ -52,11 +55,17 @@ entity Transaction {
     --
     customer_id : int <<FK>>
     agent_id : int <<FK>>
-    location_id : int <<PK>>
+    address : varchar
+    province : varchar
+    city : varchar
+    district : varchar
+    latitude : decimal null
+    longitude : decimal null
+    services : string
     type : varchar
     amount : int
     status : int
-    ratting : int null
+    rating : int null
 }
 
 Sessions }|--|| Login
