@@ -71,6 +71,15 @@ func (auth AuthService) ValidateSession(sid string) error {
 	return nil
 }
 
-func (auth AuthService) Logout() {
-
+func (auth AuthService) Logout(contr *contract.LoginResponse) error {
+	ent := entities.Session{SID: contr.SID}
+	err := auth.SessionRepository.Get(&ent)
+	if err != nil {
+		return err
+	}
+	err = auth.SessionRepository.Delete(&ent)
+	if err != nil {
+		return err
+	}
+	return nil
 }
