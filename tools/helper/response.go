@@ -9,9 +9,8 @@ type Response struct {
 }
 
 type ResponseFail struct {
-	Status  int         `json:"status"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Status  int    `json:"status"`
+	Message string `json:"message"`
 }
 
 func JsonResponseOkBuilder(c *fiber.Ctx, status int, msg string, data interface{}) error {
