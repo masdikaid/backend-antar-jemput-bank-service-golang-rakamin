@@ -24,8 +24,8 @@ func (S ServiceAgent) GetAgent(id uint) (*contract.Agent, error) {
 	return &contract, nil
 }
 
-func (S ServiceAgent) GetListAgent(district, city string) ([]*contract.Agent, error) {
-	res, err := S.Repository.GetAvailableAgent(district, city)
+func (S ServiceAgent) GetListAgent(district string, trx int) ([]*contract.Agent, error) {
+	res, err := S.Repository.GetAvailableAgent(district, trx)
 	if err != nil {
 		return nil, err
 	}
