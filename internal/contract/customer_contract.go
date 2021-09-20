@@ -2,6 +2,7 @@ package contract
 
 type Customer struct {
 	CustomerID int      `json:"id_cust"`
+	Service    string   `json:"jenis_layanan"`
 	Tipe       string   `json:"jenis_transaksi"`
 	Amount     int      `json:"nominal_transaksi_idr"`
 	Province   string   `json:"alamat_cust_provinsi"`

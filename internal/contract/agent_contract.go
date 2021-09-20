@@ -6,14 +6,15 @@ import (
 )
 
 type Agent struct {
-	ID          uint   `json:"id_agen"`
-	Name        string `json:"nama_agen"`
-	OutletName  string `json:"nama_outlet"`
-	Address     string `json:"alamat_agen_lengkap"`
-	District    string `json:"alamat_agen_kecamatan"`
-	City        string `json:"alamat_agen_kabko"`
-	Province    string `json:"alamat_agen_provinsi"`
-	PhoneNumber string `json:"no_wa"`
+	ID          uint    `json:"id_agen"`
+	OutletName  string  `json:"nama_outlet"`
+	Name        string  `json:"nama_agen"`
+	PhoneNumber string  `json:"no_telp"`
+	Province    string  `json:"alamat_agen_provinsi"`
+	City        string  `json:"alamat_agen_kabko"`
+	District    string  `json:"alamat_agen_kecamatan"`
+	Address     string  `json:"alamat_agen_lengkap"`
+	Rating      float32 `json:"rating"`
 }
 
 func (a *Agent) FromEntity(source entities.Agents) {

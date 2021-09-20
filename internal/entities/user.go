@@ -16,9 +16,12 @@ type Customers struct {
 
 type Agents struct {
 	Users
-	OutletName string
-	LoginID    uint
-	Login      Login
-	LocationID uint
-	Location   Location
+	OutletName  string
+	IsAvailable bool
+	MaxTrx      int
+	Rating      float32
+	LoginID     uint
+	Login       Login
+	LocationID  uint
+	Location    Location
 }
