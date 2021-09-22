@@ -20,7 +20,7 @@ type AgentRepositoryMysql struct {
 func (usr AgentRepositoryMysql) GetByID(id uint) (*entities.Agents, error) {
 	ent := entities.Agents{}
 	databases.Load()
-	err := databases.DBCon.Preload("Login").First(&ent, id)
+	err := databases.DBCon.Preload("Login").Preload("Location").First(&ent, id)
 	if err.Error != nil {
 		return nil, err.Error
 	}

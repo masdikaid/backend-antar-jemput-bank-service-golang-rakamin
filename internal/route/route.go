@@ -15,6 +15,7 @@ func SetupRoutes(app *fiber.App) {
 	apiroute.Get("/login", api.Login)
 	apiroute.Get("/logout", api.Logout)
 	apiroute.Post("/cariagen", api.FindAgent)
+	apiroute.Get("/profil", api.GetProfile)
 	apiroute.Get("/transaksi", api.GetTransactions)
 	apiroute.Post("/transaksi/create", api.CreateTransaction)
 	apiroute.Post("/transaksi/dikonfirmasi", api.ConfirmTransactions)

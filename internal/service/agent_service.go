@@ -3,7 +3,6 @@ package service
 import (
 	"backend-a-antar-jemput/internal/contract"
 	"backend-a-antar-jemput/internal/repository"
-	"backend-a-antar-jemput/tools/helper"
 )
 
 type ServiceAgentInterface interface {
@@ -20,7 +19,7 @@ func (S ServiceAgent) GetAgent(id uint) (*contract.Agent, error) {
 	}
 
 	contract := contract.Agent{}
-	helper.ConvertStruct(res, &contract)
+	contract.FromEntity(*res)
 	return &contract, nil
 }
 

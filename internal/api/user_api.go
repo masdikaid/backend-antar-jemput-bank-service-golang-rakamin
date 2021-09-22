@@ -5,11 +5,13 @@ import (
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/internal/service"
 	"backend-a-antar-jemput/tools/helper"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 var ServiceAgent = service.ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
+var ServiceCustomer = service.ServiceCustomer{Repository: repository.CustomerRepositoryMysql{}}
 
 func FindAgent(c *fiber.Ctx) error {
 	var body *contract.Customer
@@ -25,4 +27,31 @@ func FindAgent(c *fiber.Ctx) error {
 
 	body.ListAgent = list
 	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "found", body)
+}
+
+func GetProfile(c *fiber.Ctx) error {
+	var agent *contract.Agent
+	var customer *contract.Customer
+	var err error
+	custID, _ := strconv.ParseUint(c.Query("id_customer"), 10, 64)
+	agentID, _ := strconv.ParseUint(c.Query("id_agen"), 10, 64)
+
+	switch {
+	case custID != 0:
+		customer, err = ServiceCustomer.GetCustomer(uint(custID))
+		if err != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		}
+		return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", customer)
+
+	case agentID != 0:
+		agent, err = ServiceAgent.GetAgent(uint(agentID))
+		if err != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		}
+		return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", agent)
+
+	default:
+		return helper.JsonResponseFailBuilder(c, fiber.StatusNotFound, err.Error())
+	}
 }
