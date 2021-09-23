@@ -7,11 +7,11 @@ import (
 
 type AgentRepositoryInterface interface {
 	// Create(user *entities.Agents) (*entities.Agents, error) //1
-	GetByID(id uint) (entities.Agents, error) //1
-	// Update() (*entities.Transaction, error)                      //1
+	GetByID(id uint) (*entities.Agents, error)             //1
+	Update(ent *entities.Agents) (*entities.Agents, error) //1
 	// Delete() error                                               //10
 
-	GetAvailableAgent(district string, trx int) (entities.Agents, error)
+	GetAvailableAgent(district string, trx int) (*[]entities.Agents, error)
 }
 
 type AgentRepositoryMysql struct {
@@ -48,4 +48,13 @@ func (usr AgentRepositoryMysql) GetAvailableAgent(district string, trx int) (*[]
 	// }
 
 	return &ent, nil
+}
+
+func (usr AgentRepositoryMysql) Update(ent *entities.Agents) (*entities.Agents, error) {
+	databases.Load()
+	err := databases.DBCon.Save(ent)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+	return ent, nil
 }

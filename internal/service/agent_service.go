@@ -37,3 +37,21 @@ func (S ServiceAgent) GetListAgent(district string, trx int) ([]*contract.Agent,
 	}
 	return contractList, nil
 }
+
+func (S ServiceAgent) UpdateRating(id uint, rating int) error {
+	res, err := S.Repository.GetByID(id)
+	if err != nil {
+		return err
+	}
+
+	if rating == 0 {
+		return nil
+	}
+	res.Rating = (res.Rating + float32(rating)) / 2
+
+	_, errr := S.Repository.Update(res)
+	if errr != nil {
+		return errr
+	}
+	return nil
+}
