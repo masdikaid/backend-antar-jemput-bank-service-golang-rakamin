@@ -20,8 +20,8 @@ func FindAgent(c *fiber.Ctx) error {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, "bad request")
 	}
 
-	list, err2 := ServiceAgent.GetListAgent(body.District, body.Amount)
-	if err2 != nil {
+	list, errr := ServiceAgent.GetListAgent(body.Service, body.Tipe, body.District, body.Amount)
+	if errr != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, "bad request")
 	}
 
@@ -30,7 +30,7 @@ func FindAgent(c *fiber.Ctx) error {
 }
 
 func GetProfile(c *fiber.Ctx) error {
-	var agent *contract.Agent
+	var agent *contract.DetailAGent
 	var customer *contract.Customer
 	var err error
 	custID, _ := strconv.ParseUint(c.Query("id_customer"), 10, 64)
@@ -49,9 +49,31 @@ func GetProfile(c *fiber.Ctx) error {
 		if err != nil {
 			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 		}
+
+		list, errr := ServiceAgent.GetAgentService(uint(agentID))
+		if errr != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		}
+
+		agent.Service = list
 		return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", agent)
 
 	default:
 		return helper.JsonResponseFailBuilder(c, fiber.StatusNotFound, err.Error())
 	}
 }
+
+// func CreateProfileAgent(c *fiber.Ctx) error {
+// 	var agent *contract.DetailAGent
+// 	err := c.BodyParser(&agent)
+// 	if err != nil {
+// 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+// 	}
+
+// 	_, errr := ServiceAgent.Create(agent)
+// 	if errr != nil {
+// 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, errr.Error())
+// 	}
+
+// 	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "created", agent)
+// }

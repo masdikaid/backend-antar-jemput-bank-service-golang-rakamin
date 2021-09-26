@@ -19,9 +19,17 @@ type Agents struct {
 	OutletName  string
 	IsAvailable bool
 	MaxTrx      int
-	Rating      float32
+	Rating      float64
 	LoginID     uint
 	Login       Login
 	LocationID  uint
 	Location    Location
+	Services    []*Services `gorm:"many2many:agent_services;"`
+}
+
+type Services struct {
+	gorm.Model
+	ServiceName     string
+	TransactionName string
+	Agents          []*Agents `gorm:"many2many:agent_services;"`
 }

@@ -24,17 +24,25 @@ func RunSeeds() {
 	databases.DBCon.Create(&customers)
 
 	locations := []*entities.Location{
-		{Login: *logins[0], City: "jakarta"},
-		{Login: *logins[1], City: "Bekasi"},
-		{Login: *logins[2], City: "Bogor"},
-		{Login: *logins[3], City: "Palembang"},
+		{Login: *logins[0], City: "jakarta", District: "Jakarta Kecamatan"},
+		{Login: *logins[1], City: "Bekasi", District: "Bekasi Kecamatan"},
+		{Login: *logins[2], City: "Bogor", District: "Bogor Kecamatan"},
+		{Login: *logins[3], City: "Palembang", District: "Palembang Kecamatan"},
 	}
 
 	databases.DBCon.Create(&locations)
 
+	services := []*entities.Services{
+		{ServiceName: "Laku Pandai", TransactionName: "Tarik Tunai"},
+		{ServiceName: "Mini ATM BRI", TransactionName: "Setor-Pasti"},
+		{ServiceName: "Tunai", TransactionName: "Setoran Pinjaman"},
+	}
+
+	databases.DBCon.Create(&services)
+
 	agents := []*entities.Agents{
-		{Login: *logins[2], Location: *locations[0], OutletName: "Berkah Link", Users: entities.Users{Name: "Firman", PhoneNumber: "085771002552"}},
-		{Login: *logins[3], Location: *locations[1], OutletName: "Jaya ATM Link", Users: entities.Users{Name: "Bagong", PhoneNumber: "085771002553"}},
+		{Login: *logins[2], Location: *locations[0], OutletName: "Berkah Link", Users: entities.Users{Name: "Firman", PhoneNumber: "085771002552"}, Services: []*entities.Services{services[0], services[1], services[2]}, MaxTrx: 1000000, IsAvailable: true},
+		{Login: *logins[3], Location: *locations[1], OutletName: "Jaya ATM Link", Users: entities.Users{Name: "Bagong", PhoneNumber: "085771002553"}, Services: []*entities.Services{services[2]}, MaxTrx: 1000000, IsAvailable: true},
 	}
 
 	databases.DBCon.Create(&agents)
