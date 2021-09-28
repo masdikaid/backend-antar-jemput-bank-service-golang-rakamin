@@ -37,8 +37,8 @@ func (S ServiceAgent) GetAgentService(id uint) ([]*contract.Service, error) {
 	return contractList, nil
 }
 
-func (S ServiceAgent) GetListAgent(service, tipe, district string, trx int) ([]*contract.ListAgent, error) {
-	res, err := S.Repository.GetAvailableAgent(service, tipe, district, trx)
+func (S ServiceAgent) GetListAgent(service, district string, trx int) ([]*contract.ListAgent, error) {
+	res, err := S.Repository.GetAvailableAgent(service, district, trx)
 	if err != nil {
 		return nil, err
 	}

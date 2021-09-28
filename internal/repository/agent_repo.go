@@ -39,11 +39,11 @@ func (usr AgentRepositoryMysql) GetServiceByID(id uint) (*[]entities.Services, e
 	return &ent, nil
 }
 
-func (usr AgentRepositoryMysql) GetAvailableAgent(service, tipe, district string, trx int) (*[]entities.Agents, error) {
+func (usr AgentRepositoryMysql) GetAvailableAgent(service, district string, trx int) (*[]entities.Agents, error) {
 	ent := []entities.Agents{}
 	ser := entities.Services{}
 	databases.Load()
-	err := databases.DBCon.Where("service_name=? AND transaction_name=?", service, tipe).First(&ser)
+	err := databases.DBCon.Where("service_name=?", service).First(&ser)
 	if err.Error != nil {
 		return nil, err.Error
 	}

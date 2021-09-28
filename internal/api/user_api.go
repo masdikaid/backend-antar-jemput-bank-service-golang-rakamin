@@ -20,7 +20,7 @@ func FindAgent(c *fiber.Ctx) error {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, "bad request")
 	}
 
-	list, errr := ServiceAgent.GetListAgent(body.Service, body.Tipe, body.District, body.Amount)
+	list, errr := ServiceAgent.GetListAgent(body.Service, body.District, body.Amount)
 	if errr != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, "bad request")
 	}

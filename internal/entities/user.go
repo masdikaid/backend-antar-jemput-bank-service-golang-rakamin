@@ -29,7 +29,7 @@ type Agents struct {
 
 type Services struct {
 	gorm.Model
-	ServiceName     string
-	TransactionName string
-	Agents          []*Agents `gorm:"many2many:agent_services;"`
+	ServiceName string
+	Description string
+	Agents      []*Agents `gorm:"many2many:agent_services;"`
 }

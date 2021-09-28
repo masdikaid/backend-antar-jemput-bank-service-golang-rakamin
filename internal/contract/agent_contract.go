@@ -49,9 +49,9 @@ func (a *DetailAGent) FromEntity(source entities.Agents) {
 }
 
 type Service struct {
-	ID              uint   `json:"id"`
-	ServiceName     string `json:"judul"`
-	TransactionName string `json:"deskripsi"`
+	ID          uint   `json:"id"`
+	ServiceName string `json:"judul"`
+	Description string `json:"deskripsi"`
 }
 
 func (s *Service) FromEntity(source entities.Services) {
