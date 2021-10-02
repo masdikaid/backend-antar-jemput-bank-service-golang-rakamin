@@ -24,32 +24,29 @@ func RunSeeds() {
 	databases.DBCon.Create(&customers)
 
 	locations := []*entities.Location{
-		{Login: *logins[0], City: "jakarta"},
-		{Login: *logins[1], City: "Bekasi"},
-		{Login: *logins[2], City: "Bogor"},
-		{Login: *logins[3], City: "Palembang"},
+		{Login: *logins[0], City: "jakarta", District: "Jakarta Kecamatan"},
+		{Login: *logins[1], City: "Bekasi", District: "Bekasi Kecamatan"},
+		{Login: *logins[2], City: "Bogor", District: "Bogor Kecamatan"},
+		{Login: *logins[3], City: "Palembang", District: "Palembang Kecamatan"},
 	}
 
 	databases.DBCon.Create(&locations)
 
+	services := []*entities.Services{
+		{ServiceName: "Laku Pandai", Description: "Tarik Tunai"},
+		{ServiceName: "Mini ATM BRI", Description: "Setor-Pasti"},
+		{ServiceName: "Tunai", Description: "Setoran Pinjaman"},
+	}
+
+	databases.DBCon.Create(&services)
+
 	agents := []*entities.Agents{
-		{Login: *logins[2], Location: *locations[0], OutletName: "Berkah Link", Users: entities.Users{Name: "Firman", PhoneNumber: "085771002552"}},
-		{Login: *logins[3], Location: *locations[1], OutletName: "Jaya ATM Link", Users: entities.Users{Name: "Bagong", PhoneNumber: "085771002553"}},
+		{Login: *logins[2], Location: *locations[0], OutletName: "Berkah Link", Users: entities.Users{Name: "Firman", PhoneNumber: "085771002552"}, Services: []*entities.Services{services[0], services[1], services[2]}, MaxTrx: 25000000, IsAvailable: true},
+		{Login: *logins[3], Location: *locations[1], OutletName: "Jaya ATM Link", Users: entities.Users{Name: "Bagong", PhoneNumber: "085771002553"}, Services: []*entities.Services{services[2]}, MaxTrx: 25000000, IsAvailable: true},
 	}
 
 	databases.DBCon.Create(&agents)
 
-	// gorm.Model
-	// 	CustomersID uint
-	// 	Customers   Customers
-	// 	AgentsID    uint
-	// 	Agents      Agents
-	// 	LocationID  uint
-	// 	Location    Location
-	// 	Tipe        string
-	// 	Amount      int
-	// 	Status      int
-	// 	Rating      float64
 	transactions := []*entities.Transaction{
 		{Customers: *customers[0], Agents: *agents[1], Location: *locations[0], Tipe: "dummy", Amount: 10000, Status: 1},
 		{Customers: *customers[1], Agents: *agents[0], Location: *locations[0], Tipe: "dummy 2", Amount: 30000, Status: 0},
