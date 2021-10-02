@@ -47,17 +47,6 @@ func RunSeeds() {
 
 	databases.DBCon.Create(&agents)
 
-	// gorm.Model
-	// 	CustomersID uint
-	// 	Customers   Customers
-	// 	AgentsID    uint
-	// 	Agents      Agents
-	// 	LocationID  uint
-	// 	Location    Location
-	// 	Tipe        string
-	// 	Amount      int
-	// 	Status      int
-	// 	Rating      float64
 	transactions := []*entities.Transaction{
 		{Customers: *customers[0], Agents: *agents[1], Location: *locations[0], Tipe: "dummy", Amount: 10000, Status: 1},
 		{Customers: *customers[1], Agents: *agents[0], Location: *locations[0], Tipe: "dummy 2", Amount: 30000, Status: 0},
