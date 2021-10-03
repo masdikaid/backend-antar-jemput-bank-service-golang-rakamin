@@ -1,0 +1,1 @@
+web: bin/antar-jemput-brilink-api
