@@ -19,7 +19,7 @@ jobs:
     - name: Build App
       run: go build -o bin/antar-jemput-bri-link -v ./cmd/main.go
 
-    - name: Login
+    - name: Push App
       env: 
         HEROKU_API_KEY: b8413970-0112-4624-88c7-55f11d353f24
       run: heroku container:push -a pure-scrubland-77616 web
