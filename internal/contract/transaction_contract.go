@@ -44,15 +44,15 @@ func (t *Transaction) ToEntity() *entities.Transaction {
 }
 
 type TransactionResponse struct {
-	ID       uint
-	Status   uint
-	CreateAt time.Time
-	Service  string
-	Type     string
-	Amount   uint
-	Ratting  float64
-	Agent    ListAgent
-	Customer CustomerResponse
+	ID       uint             `json:"id"`
+	Status   uint             `json:"status"`
+	CreateAt time.Time        `json:"create_at"`
+	Service  string           `json:"jenis_layanan"`
+	Type     string           `json:"jenis_transaksi"`
+	Amount   uint             `json:"nominal_transaksi"`
+	Ratting  float64          `json:"rating"`
+	Agent    ListAgent        `json:"agen"`
+	Customer CustomerResponse `json:"customer"`
 }
 
 func (t *TransactionResponse) FromEntity(s *entities.Transaction) {

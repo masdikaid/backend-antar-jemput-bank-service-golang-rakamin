@@ -21,6 +21,14 @@ type SessionRepository interface {
 type AuthRepositoryMysql struct {
 }
 
+// func (AuthRepositoryMysql) GetUserID(ent *entities.Login) error {
+// 	err := databases.DBCon.Where(ent).First(&ent)
+// 	if err.Error != nil {
+// 		return err.Error
+// 	}
+// 	return err.Error
+// }
+
 func (AuthRepositoryMysql) Get(ent *entities.Login) error {
 	err := databases.DBCon.Where(ent).First(&ent)
 	if err.Error != nil {
