@@ -2,65 +2,103 @@ package contract
 
 import (
 	"backend-a-antar-jemput/internal/entities"
-	"backend-a-antar-jemput/tools/helper"
+	"time"
 )
 
-// type Transaction struct{
-// 	Tipe string `json:"jenis_transaksi"`
-// 	Amount int `json:"nominal_transaksi_idr"`
-// 	Status int `json:"Status"`
-// 	//Rating float64 `json:Rating`
-// 	//id int
-// 	//customerId customer
-// 	//agetId Agent
-// 	//locationID Location
-// }
-
 type Transaction struct {
-	Status      int     `json:"status"`
-	CustomersID uint    `json:"id_cust"`
-	Tipe        string  `json:"jenis_transaksi"`
-	Amount      int     `json:"nominal_transaksi_idr"`
-	Province    string  `json:"alamat_cust_provinsi"`
-	City        string  `json:"alamat_cust_kabko"`
-	District    string  `json:"alamat_cust_kecamatan"`
-	Address     string  `json:"alamat_cust_lengkap"`
-	AgentsID    uint    `json:"id_agen"`
-	ID          uint    `json:"id_transaksi"`
-	Rating      float64 `json:"rating"`
+	CustomersID uint   `json:"id_cust"`
+	Services    string `json:"jenis_layanan"`
+	Type        string `json:"jenis_transaksi"`
+	Amount      uint   `json:"nominal_transaksi_idr"`
+	Province    string `json:"provinsi"`
+	City        string `json:"kabko"`
+	District    string `json:"kecamatan"`
+	Address     string `json:"alamat_lengkap"`
+	AgentsID    uint   `json:"id_agen"`
 }
 
-func (t *Transaction) FromEntity(source *entities.Transaction) {
-	helper.ConvertStruct(source, t)
-	t.Province = source.Location.Province
-	t.City = source.Location.City
-	t.District = source.Location.District
-	t.Address = source.Location.Address
+func (t *Transaction) FromEntity(s *entities.Transaction) {
+	t.CustomersID = s.CustomersID
+	t.Services = s.Services.ServiceName
+	t.Type = s.Type
+	t.Amount = s.Amount
+	t.Province = s.Province
+	t.City = s.City
+	t.District = s.District
+	t.Address = s.Address
+	t.AgentsID = s.AgentsID
 }
 
 func (t *Transaction) ToEntity() *entities.Transaction {
 	ent := entities.Transaction{}
-	helper.ConvertStruct(t, ent)
-	ent.Amount = t.Amount
-	ent.Tipe = t.Tipe
-	ent.AgentsID = t.AgentsID
 	ent.CustomersID = t.CustomersID
-	ent.Location.Province = t.Province
-	ent.Location.City = t.City
-	ent.Location.District = t.District
-	ent.Location.Address = t.Address
+	ent.Services = entities.Services{ServiceName: t.Services}
+	ent.Type = t.Type
+	ent.Amount = t.Amount
+	ent.Province = t.Province
+	ent.City = t.City
+	ent.District = t.District
+	ent.Address = t.Address
+	ent.AgentsID = t.AgentsID
 	return &ent
 }
 
-// "jenis_transaksi": "Setoran Pinjaman",
-// "nominal_transaksi_idr":1000000,
-// "alamat_cust_provinsi": "JAWA BARAT",
-// "alamat_cust_kabko": "BANDUNG",
-// "alamat_cust_kecamatan":"SOREANG",
-// "alamat_cust_lengkap":"Jl. Soreang No.181",
-// "id_agen":3}
+type TransactionResponse struct {
+	ID       uint
+	Status   uint
+	CreateAt time.Time
+	Service  string
+	Type     string
+	Amount   uint
+	Ratting  float64
+	Agent    ListAgent
+	Customer CustomerResponse
+}
 
-// type TransactionResponse struct{
-// 	Status int `json:status`
-// 	Message string `json:message`
-// }
+func (t *TransactionResponse) FromEntity(s *entities.Transaction) {
+	agent := ListAgent{
+		ID:          s.AgentsID,
+		OutletName:  s.Agents.OutletName,
+		Name:        s.Agents.Name,
+		PhoneNumber: s.Agents.PhoneNumber,
+		Rating:      s.Agents.Rating,
+		Province:    s.Agents.Location.Province,
+		City:        s.Agents.Location.City,
+		District:    s.Agents.Location.District,
+		Address:     s.Agents.Location.Address,
+	}
+
+	cust := CustomerResponse{
+		ID:          s.Customers.ID,
+		Name:        s.Customers.Name,
+		PhoneNumber: s.Customers.PhoneNumber,
+		Province:    s.Province,
+		City:        s.City,
+		District:    s.District,
+		Address:     s.Address,
+	}
+
+	t.ID = s.ID
+	t.Status = s.Status
+	t.CreateAt = s.CreatedAt
+	t.Service = s.Services.ServiceName
+	t.Type = s.Type
+	t.Amount = s.Amount
+	t.Ratting = s.Rating
+	t.Agent = agent
+	t.Customer = cust
+}
+
+func (t *TransactionResponse) ToEntity() *entities.Transaction {
+	ent := entities.Transaction{}
+	ent.ID = t.ID
+	ent.Status = t.Status
+	ent.CreatedAt = t.CreateAt
+	ent.Services = entities.Services{ServiceName: t.Service}
+	ent.Type = t.Type
+	ent.Amount = t.Amount
+	ent.Rating = t.Ratting
+	ent.AgentsID = t.Agent.ID
+	ent.CustomersID = t.Customer.ID
+	return &ent
+}
