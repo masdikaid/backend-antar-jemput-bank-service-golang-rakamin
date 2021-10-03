@@ -44,10 +44,12 @@ func (auth AuthService) Login(contr contract.LoginRequest) (string, error) {
 	LoginContract := contract.LoginResponse{}
 	LoginContract.FromEntity(&ent, &session)
 
+	userid := auth.AuthRepository.GetUserID(ent)
+
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = LoginContract.ID
+	claims["id"] = userid
 	claims["nama"] = LoginContract.Name
 	claims["role"] = LoginContract.Role
 	claims["sid"] = LoginContract.SID

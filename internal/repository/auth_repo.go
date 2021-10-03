@@ -3,10 +3,13 @@ package repository
 import (
 	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/entities"
+
+	"gorm.io/gorm"
 )
 
 type AuthRepository interface {
 	Get(ent *entities.Login) error
+	GetUserID(ent entities.Login) uint
 	Create(ent *entities.Login) error
 	Update(ent *entities.Login) error
 	Delete(ent *entities.Login) error
@@ -21,13 +24,24 @@ type SessionRepository interface {
 type AuthRepositoryMysql struct {
 }
 
-// func (AuthRepositoryMysql) GetUserID(ent *entities.Login) error {
-// 	err := databases.DBCon.Where(ent).First(&ent)
-// 	if err.Error != nil {
-// 		return err.Error
-// 	}
-// 	return err.Error
-// }
+func (AuthRepositoryMysql) GetUserID(ent entities.Login) uint {
+	var err *gorm.DB
+	var id uint
+	if ent.LoginAs == 1 {
+		user := entities.Customers{Login: ent}
+		err = databases.DBCon.Where(&user).First(&user)
+		id = user.ID
+
+	} else {
+		user := entities.Agents{Login: ent}
+		err = databases.DBCon.Where(&user).First(&user)
+		id = user.ID
+	}
+	if err.Error != nil {
+		return 0
+	}
+	return id
+}
 
 func (AuthRepositoryMysql) Get(ent *entities.Login) error {
 	err := databases.DBCon.Where(ent).First(&ent)
