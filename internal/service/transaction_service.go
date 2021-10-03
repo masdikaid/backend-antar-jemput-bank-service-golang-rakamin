@@ -4,8 +4,6 @@ import (
 	"backend-a-antar-jemput/internal/contract"
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/tools/helper"
-	//"github.com/gofiber/fiber/v2"
-	//"go/constant"
 )
 
 type ServiceTrasactionInterface interface {
@@ -15,7 +13,7 @@ type ServiceTrasaction struct {
 	Repository repository.TransactionRepositoryInterface
 }
 
-func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.Transaction, error) {
+func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.TransactionResponse, error) {
 	ent := trans.ToEntity()
 
 	agent := ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
@@ -30,60 +28,59 @@ func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.Trans
 
 	ent.Agents = *agentEnt
 	ent.Customers = *custEnt
-	ent.Location.Login = ent.Customers.Login
 
 	res, err := S.Repository.Create(ent)
 	if err != nil {
 		return nil, err
 	}
-	contract := contract.Transaction{}
+	contract := contract.TransactionResponse{}
 	contract.FromEntity(res)
 	return &contract, nil
 }
 
-func (S *ServiceTrasaction) GetAll() ([]*contract.Transaction, error) {
+func (S *ServiceTrasaction) GetAll() ([]*contract.TransactionResponse, error) {
 	res, err := S.Repository.GetAll()
 	if err != nil {
 		return nil, err
 	}
-	var contractList []*contract.Transaction
+	var contractList []*contract.TransactionResponse
 	for _, v := range res {
-		contract := contract.Transaction{}
+		contract := contract.TransactionResponse{}
 		contract.FromEntity(v)
 		contractList = append(contractList, &contract)
 	}
 	return contractList, nil
 }
 
-func (S *ServiceTrasaction) GetByCustID(id uint) ([]*contract.Transaction, error) {
+func (S *ServiceTrasaction) GetByCustID(id uint) ([]*contract.TransactionResponse, error) {
 	res, err := S.Repository.GetAllByID("cust", id)
 	if err != nil {
 		return nil, err
 	}
-	var contractList []*contract.Transaction
+	var contractList []*contract.TransactionResponse
 	for _, v := range res {
-		contract := contract.Transaction{}
+		contract := contract.TransactionResponse{}
 		contract.FromEntity(v)
 		contractList = append(contractList, &contract)
 	}
 	return contractList, nil
 }
 
-func (S *ServiceTrasaction) GetByAgentID(id uint) ([]*contract.Transaction, error) {
+func (S *ServiceTrasaction) GetByAgentID(id uint) ([]*contract.TransactionResponse, error) {
 	res, err := S.Repository.GetAllByID("agent", id)
 	if err != nil {
 		return nil, err
 	}
-	var contractList []*contract.Transaction
+	var contractList []*contract.TransactionResponse
 	for _, v := range res {
-		contract := contract.Transaction{}
+		contract := contract.TransactionResponse{}
 		contract.FromEntity(v)
 		contractList = append(contractList, &contract)
 	}
 	return contractList, nil
 }
 
-func (S *ServiceTrasaction) SetStatus(id uint, status int) (*contract.Transaction, error) {
+func (S *ServiceTrasaction) SetStatus(id uint, status uint) (*contract.TransactionResponse, error) {
 	res, err := S.Repository.GetByID(id)
 	if err != nil {
 		return nil, err
@@ -94,7 +91,7 @@ func (S *ServiceTrasaction) SetStatus(id uint, status int) (*contract.Transactio
 	if errr != nil {
 		return nil, errr
 	}
-	contract := contract.Transaction{}
+	contract := contract.TransactionResponse{}
 	helper.ConvertStruct(res, &contract)
 	return &contract, nil
 }
@@ -108,7 +105,7 @@ func (S *ServiceTrasaction) Delete(id uint) error {
 	if errr != nil {
 		return errr
 	}
-	contract := contract.Transaction{}
+	contract := contract.TransactionResponse{}
 	helper.ConvertStruct(res, &contract)
 	return nil
 }
