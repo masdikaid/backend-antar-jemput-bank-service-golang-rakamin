@@ -1,1 +1,1 @@
-web: bin/antar-jemput-brilink-api
+web: ./bin/cmd
