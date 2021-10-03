@@ -21,7 +21,7 @@ import (
 
 func main() {
 	// check if migration call in arg
-	// its not uptodate
+	// its not uptodate please uptodate
 
 	args := os.Args[1:]
 	// when main call with argument
