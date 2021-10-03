@@ -16,6 +16,7 @@ import (
 
 	// package import
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
@@ -40,7 +41,7 @@ func main() {
 		app := SetupFiber()
 
 		// listening
-		log.Fatal(app.Listen(os.Getenv("APP_PORT")))
+		log.Fatal(app.Listen(":" + os.Getenv("PORT")))
 	}
 
 }
@@ -50,7 +51,11 @@ func SetupFiber() *fiber.App {
 	app := fiber.New(fiber.Config{})
 	// setup log
 	app.Use(logger.New(logger.ConfigDefault))
-
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://127.0.0.1:3000, http://localhost:3000",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowCredentials: true,
+	}))
 	// setup route
 	route.SetupRoutes(app)
 	return app
