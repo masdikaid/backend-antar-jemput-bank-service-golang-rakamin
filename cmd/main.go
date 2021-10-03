@@ -3,6 +3,8 @@ package main
 import (
 	// project import
 	_ "backend-a-antar-jemput/config"
+	"fmt"
+
 	//"backend-a-antar-jemput/internal/models"
 	"backend-a-antar-jemput/internal/route"
 	"backend-a-antar-jemput/tools/migration"
@@ -40,6 +42,7 @@ func main() {
 		app := SetupFiber()
 
 		// listening
+		fmt.Println(":" + os.Getenv("PORT"))
 		log.Fatal(app.Listen(":" + os.Getenv("PORT")))
 	}
 
