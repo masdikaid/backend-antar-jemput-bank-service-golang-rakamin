@@ -27,7 +27,7 @@ func CreateTransaction(c *fiber.Ctx) error {
 
 func GetTransactions(c *fiber.Ctx) error {
 
-	var res []*contract.Transaction
+	var res []*contract.TransactionResponse
 	var err error
 	custID, _ := strconv.ParseUint(c.Query("id_customer"), 10, 64)
 	agentID, _ := strconv.ParseUint(c.Query("id_agen"), 10, 64)
@@ -58,7 +58,7 @@ func ConfirmTransactions(c *fiber.Ctx) error {
 	if err != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
-	res, err := Service.SetStatus(idTrx.ID,1)
+	res, err := Service.SetStatus(idTrx.ID, 1)
 	if err != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
@@ -75,7 +75,7 @@ func CancelTransactions(c *fiber.Ctx) error {
 	if err != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
-	res, err := Service.SetStatus(idTrx.ID,2)
+	res, err := Service.SetStatus(idTrx.ID, 2)
 	if err != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
@@ -92,7 +92,7 @@ func FinishTransactions(c *fiber.Ctx) error {
 	if err != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
-	res, err := Service.SetStatus(idTrx.ID,3)
+	res, err := Service.SetStatus(idTrx.ID, 3)
 	if err != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
@@ -100,16 +100,19 @@ func FinishTransactions(c *fiber.Ctx) error {
 }
 
 func DeleteTransactions(c *fiber.Ctx) error {
-	idTrx,err := c.ParamsInt("id")
+	type confirm struct {
+		ID uint `json:"id_transaksi"`
+	}
+
+	idTrx := confirm{}
+	err := c.BodyParser(&idTrx)
+
 	if err != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
-	err = Service.Delete(uint(idTrx))
+	err = Service.Delete(idTrx.ID)
 	if err != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
 	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Deleted", nil)
 }
-
-
-
