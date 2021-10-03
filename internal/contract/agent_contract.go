@@ -10,10 +10,10 @@ type ListAgent struct {
 	OutletName  string  `json:"nama_outlet"`
 	Name        string  `json:"nama_agen"`
 	PhoneNumber string  `json:"no_telp"`
-	Province    string  `json:"alamat_agen_provinsi"`
-	City        string  `json:"alamat_agen_kabko"`
-	District    string  `json:"alamat_agen_kecamatan"`
-	Address     string  `json:"alamat_agen_lengkap"`
+	Province    string  `json:"provinsi"`
+	City        string  `json:"kabko"`
+	District    string  `json:"kecamatan"`
+	Address     string  `json:"alamat_lengkap"`
 	Rating      float64 `json:"rating"`
 }
 
@@ -30,10 +30,10 @@ type DetailAGent struct {
 	OutletName  string     `json:"nama_outlet"`
 	Name        string     `json:"nama_agen"`
 	PhoneNumber string     `json:"no_telp"`
-	Province    string     `json:"alamat_agen_provinsi"`
-	City        string     `json:"alamat_agen_kabko"`
-	District    string     `json:"alamat_agen_kecamatan"`
-	Address     string     `json:"alamat_agen_lengkap"`
+	Province    string     `json:"provinsi"`
+	City        string     `json:"kabko"`
+	District    string     `json:"kecamatan"`
+	Address     string     `json:"alamat_lengkap"`
 	MaxTrx      int        `json:"maksimum_transaksi"`
 	IsAvailable bool       `json:"status"`
 	Rating      float64    `json:"rating"`

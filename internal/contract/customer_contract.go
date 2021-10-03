@@ -5,9 +5,19 @@ type Customer struct {
 	Service    string       `json:"jenis_layanan"`
 	Tipe       string       `json:"jenis_transaksi"`
 	Amount     int          `json:"nominal_transaksi_idr"`
-	Province   string       `json:"alamat_cust_provinsi"`
-	City       string       `json:"alamat_cust_kabko"`
-	District   string       `json:"alamat_cust_kecamatan"`
-	Address    string       `json:"alamat_cust_lengkap"`
+	Province   string       `json:"provinsi"`
+	City       string       `json:"kabko"`
+	District   string       `json:"kecamatan"`
+	Address    string       `json:"alamat_lengkap"`
 	ListAgent  []*ListAgent `json:"list_rekomendasi_agen"`
+}
+
+type CustomerResponse struct {
+	ID          uint   `json:"id_cust"`
+	Name        string `json:"nama"`
+	PhoneNumber string `json:"no_telp"`
+	Province    string `json:"provinsi"`
+	City        string `json:"kabko"`
+	District    string `json:"kecamatan"`
+	Address     string `json:"alamat_lengkap"`
 }
