@@ -8,9 +8,7 @@ import (
 func RunSeeds() {
 	logins := []*entities.Login{
 		{Username: "masdikaid", Password: "masdika00", LoginAs: 1},
-		{Username: "masdika", Password: "masdika00", LoginAs: 1},
-		{},
-		{},
+		{Username: "masdika", Password: "masdika00", LoginAs: 2},
 	}
 
 	databases.Load()
@@ -48,9 +46,9 @@ func RunSeeds() {
 	databases.DBCon.Create(&agents)
 
 	transactions := []*entities.Transaction{
-		{Customers: *customers[0], Agents: *agents[1], Location: *locations[0], Tipe: "dummy", Amount: 10000, Status: 1},
-		{Customers: *customers[1], Agents: *agents[0], Location: *locations[0], Tipe: "dummy 2", Amount: 30000, Status: 0},
-		{Customers: *customers[1], Agents: *agents[1], Location: *locations[0], Tipe: "dummy 3", Amount: 300000, Status: 3},
+		{Customers: *customers[0], Agents: *agents[1], Address: "jl asem", Province: "Jakarta", City: "Jakarta Pusat", District: "Mangga Besar", Latitude: 1.2, Longitude: 2.2, Services: *services[0], Type: "dummy", Amount: 10000, Status: 1},
+		{Customers: *customers[1], Agents: *agents[0], Address: "jl asem", Province: "Jakarta", City: "Jakarta Pusat", District: "Mangga Besar", Latitude: 1.2, Longitude: 2.2, Services: *services[0], Type: "dummy 2", Amount: 30000, Status: 0},
+		{Customers: *customers[1], Agents: *agents[1], Address: "jl asem", Province: "Jakarta", City: "Jakarta Pusat", District: "Mangga Besar", Latitude: 1.2, Longitude: 2.2, Services: *services[0], Type: "dummy 3", Amount: 300000, Status: 3},
 	}
 	databases.DBCon.Create(transactions)
 }
