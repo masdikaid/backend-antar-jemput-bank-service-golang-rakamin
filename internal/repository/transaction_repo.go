@@ -83,7 +83,7 @@ func (T TransactionRepositoryMysql) Delete(ent *entities.Transaction) (*entities
 func (T TransactionRepositoryMysql) GetByID(id uint) (*entities.Transaction, error) {
 	ent := entities.Transaction{}
 	databases.Load()
-	err := databases.DBCon.Where("id = ?", id).First(&ent)
+	err := databases.DBCon.Preload("Agents.Location").Preload("Customers").Where("id = ?", id).First(&ent)
 	if err.Error != nil {
 		return nil, err.Error
 	}

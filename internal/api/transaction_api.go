@@ -99,6 +99,24 @@ func FinishTransactions(c *fiber.Ctx) error {
 	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", res)
 }
 
+func RatingTransactions(c *fiber.Ctx) error {
+	type rating struct {
+		ID     uint `json:"id_transaksi"`
+		Rating uint `json:"rating"`
+	}
+
+	trx := rating{}
+	err := c.BodyParser(&trx)
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	res, err := Service.SetRating(trx.ID, trx.Rating)
+	if err != nil {
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+	}
+	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Success", res)
+}
+
 func DeleteTransactions(c *fiber.Ctx) error {
 	type confirm struct {
 		ID uint `json:"id_transaksi"`

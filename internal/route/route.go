@@ -22,5 +22,6 @@ func SetupRoutes(app *fiber.App) {
 	apiroute.Post("/transaksi/konfirmasi", api.ConfirmTransactions)
 	apiroute.Post("/transaksi/batal", api.CancelTransactions)
 	apiroute.Post("/transaksi/selesai", api.FinishTransactions)
+	apiroute.Post("/transaksi/rating", api.RatingTransactions)
 	apiroute.Delete("/transaksi/delete/", api.DeleteTransactions)
 }

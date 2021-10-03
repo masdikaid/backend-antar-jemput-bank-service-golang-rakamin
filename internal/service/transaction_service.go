@@ -3,7 +3,6 @@ package service
 import (
 	"backend-a-antar-jemput/internal/contract"
 	"backend-a-antar-jemput/internal/repository"
-	"backend-a-antar-jemput/tools/helper"
 )
 
 type ServiceTrasactionInterface interface {
@@ -92,7 +91,33 @@ func (S *ServiceTrasaction) SetStatus(id uint, status uint) (*contract.Transacti
 		return nil, errr
 	}
 	contract := contract.TransactionResponse{}
-	helper.ConvertStruct(res, &contract)
+	contract.FromEntity(res)
+	return &contract, nil
+}
+
+func (S *ServiceTrasaction) SetRating(id uint, rating uint) (*contract.TransactionResponse, error) {
+	agentService := ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
+	res, err := S.Repository.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+	agenterr := agentService.UpdateRating(res.AgentsID, int(rating))
+	if agenterr != nil {
+		return nil, agenterr
+	}
+	res.Rating = float64(rating)
+
+	_, errr := S.Repository.Update(res)
+	if errr != nil {
+		return nil, errr
+	}
+
+	res, err = S.Repository.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+	contract := contract.TransactionResponse{}
+	contract.FromEntity(res)
 	return &contract, nil
 }
 
@@ -106,6 +131,6 @@ func (S *ServiceTrasaction) Delete(id uint) error {
 		return errr
 	}
 	contract := contract.TransactionResponse{}
-	helper.ConvertStruct(res, &contract)
+	contract.FromEntity(res)
 	return nil
 }
