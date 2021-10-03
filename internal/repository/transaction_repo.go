@@ -4,8 +4,6 @@ import (
 	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/entities"
 	"errors"
-	//"backend-a-antar-jemput/internal/models"
-	//"backend-a-antar-jemput/internal/models"
 )
 
 type TransactionRepositoryInterface interface {
@@ -34,7 +32,7 @@ func (T TransactionRepositoryMysql) Create(ent *entities.Transaction) (*entities
 func (T TransactionRepositoryMysql) GetAll() ([]*entities.Transaction, error) {
 	databases.Load()
 	res := []*entities.Transaction{}
-	err := databases.DBCon.Preload("Location").Find(&res)
+	err := databases.DBCon.Preload("Agents.Location").Preload("Customers").Find(&res)
 	if err.Error != nil {
 		return nil, err.Error
 	}
@@ -55,7 +53,7 @@ func (T TransactionRepositoryMysql) GetAllByID(tipe string, id uint) ([]*entitie
 
 	databases.Load()
 	res := []*entities.Transaction{}
-	err := databases.DBCon.Preload("Location").Where(query, id).Find(&res)
+	err := databases.DBCon.Preload("Agents.Location").Preload("Customers").Where(query, id).Find(&res)
 	if err.Error != nil {
 		return nil, err.Error
 	}
@@ -85,7 +83,7 @@ func (T TransactionRepositoryMysql) Delete(ent *entities.Transaction) (*entities
 func (T TransactionRepositoryMysql) GetByID(id uint) (*entities.Transaction, error) {
 	ent := entities.Transaction{}
 	databases.Load()
-	err := databases.DBCon.Preload("Location").Where("id = ?", id).First(&ent)
+	err := databases.DBCon.Where("id = ?", id).First(&ent)
 	if err.Error != nil {
 		return nil, err.Error
 	}
