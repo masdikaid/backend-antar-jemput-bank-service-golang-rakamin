@@ -55,8 +55,13 @@ func SetupFiber() *fiber.App {
 	// setup log
 	app.Use(logger.New(logger.ConfigDefault))
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000, http://172.0.0.1:3000",
-		AllowHeaders: "Origin, Content-Type, Accept",
+		Next:             nil,
+		AllowOrigins:     "*",
+		AllowMethods:     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+		AllowHeaders:     "",
+		AllowCredentials: false,
+		ExposeHeaders:    "",
+		MaxAge:           0,
 	}))
 	// setup route
 	route.SetupRoutes(app)
