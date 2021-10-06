@@ -7,8 +7,10 @@ import (
 
 func RunSeeds() {
 	logins := []*entities.Login{
-		{Username: "masdikaid", Password: "masdika00", LoginAs: 1},
-		{Username: "masdika", Password: "masdika00", LoginAs: 2},
+		{Username: "masdika", Password: "rakamin00", LoginAs: 1},
+		{Username: "rudianto", Password: "rakamin00", LoginAs: 1},
+		{Username: "firman", Password: "rakamin00", LoginAs: 2},
+		{Username: "bagong", Password: "rakamin00", LoginAs: 2},
 	}
 
 	databases.Load()
@@ -22,10 +24,8 @@ func RunSeeds() {
 	databases.DBCon.Create(&customers)
 
 	locations := []*entities.Location{
-		{Login: *logins[0], City: "jakarta", District: "Jakarta Kecamatan"},
-		{Login: *logins[1], City: "Bekasi", District: "Bekasi Kecamatan"},
-		{Login: *logins[2], City: "Bogor", District: "Bogor Kecamatan"},
-		{Login: *logins[3], City: "Palembang", District: "Palembang Kecamatan"},
+		{Login: *logins[2], City: "jakarta", District: "Jakarta Kecamatan"},
+		{Login: *logins[3], City: "Bekasi", District: "Bekasi Kecamatan"},
 	}
 
 	databases.DBCon.Create(&locations)
