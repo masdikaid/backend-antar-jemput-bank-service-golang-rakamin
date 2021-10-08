@@ -52,7 +52,7 @@ func GetProfile(c *fiber.Ctx) error {
 
 		list, errr := ServiceAgent.GetAgentService(uint(agentID))
 		if errr != nil {
-			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, errr.Error())
 		}
 
 		agent.Service = list

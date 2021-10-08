@@ -58,6 +58,15 @@ func (S ServiceAgent) UpdateRating(id uint, rating int) error {
 		return err
 	}
 
+	if res.Rating == 0 {
+		res.Rating = float64(rating)
+		_, errr := S.Repository.Update(res)
+		if errr != nil {
+			return errr
+		}
+		return nil
+	}
+
 	if rating == 0 {
 		return nil
 	}
