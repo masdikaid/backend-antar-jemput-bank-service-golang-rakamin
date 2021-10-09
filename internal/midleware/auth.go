@@ -1,6 +1,7 @@
 package midleware
 
 import (
+	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/internal/service"
 	"backend-a-antar-jemput/tools/helper"
@@ -21,7 +22,7 @@ func AuthMiddleware() fiber.Handler {
 }
 
 func ValidateSession(c *fiber.Ctx) error {
-	services := service.AuthService{AuthRepository: repository.AuthRepositoryMysql{}, SessionRepository: repository.SessionRepositoryMysql{}}
+	services := service.AuthService{AuthRepository: repository.AuthRepositoryMysql{Db: databases.DBCon}, SessionRepository: repository.SessionRepositoryMysql{Db: databases.DBCon}}
 	strToken := c.Get(fiber.HeaderAuthorization)[len("Bearer "):]
 	token, err := jwt.Parse(strToken, func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("SECRET")), nil
