@@ -3,9 +3,10 @@ package main
 import (
 	// project import
 	_ "backend-a-antar-jemput/config"
-	"fmt"
 
 	//"backend-a-antar-jemput/internal/models"
+
+	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/route"
 	"backend-a-antar-jemput/tools/migration"
 	"backend-a-antar-jemput/tools/seeds"
@@ -24,6 +25,9 @@ import (
 
 func main() {
 	// check if migration call in arg
+	// its not uptodate please uptodate
+	databases.Load()
+
 	args := os.Args[1:]
 	// when main call with argument
 	if len(args) > 0 {
@@ -43,7 +47,6 @@ func main() {
 		app := SetupFiber()
 
 		// listening
-		fmt.Println(":" + os.Getenv("PORT"))
 		log.Fatal(app.Listen(":" + os.Getenv("PORT")))
 	}
 

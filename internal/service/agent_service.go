@@ -9,7 +9,7 @@ type ServiceAgentInterface interface {
 }
 
 type ServiceAgent struct {
-	Repository repository.AgentRepositoryMysql
+	Repository repository.AgentRepositoryInterface
 }
 
 func (S ServiceAgent) GetAgent(id uint) (*contract.DetailAGent, error) {
@@ -56,6 +56,15 @@ func (S ServiceAgent) UpdateRating(id uint, rating int) error {
 	res, err := S.Repository.GetByID(id)
 	if err != nil {
 		return err
+	}
+
+	if res.Rating == 0 {
+		res.Rating = float64(rating)
+		_, errr := S.Repository.Update(res)
+		if errr != nil {
+			return errr
+		}
+		return nil
 	}
 
 	if rating == 0 {
