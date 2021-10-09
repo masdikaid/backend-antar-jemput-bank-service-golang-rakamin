@@ -4,6 +4,8 @@ import (
 	// project import
 	_ "backend-a-antar-jemput/config"
 	//"backend-a-antar-jemput/internal/models"
+
+	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/route"
 	"backend-a-antar-jemput/tools/migration"
 	"backend-a-antar-jemput/tools/seeds"
@@ -22,6 +24,7 @@ import (
 func main() {
 	// check if migration call in arg
 	// its not uptodate please uptodate
+	databases.Load()
 
 	args := os.Args[1:]
 	// when main call with argument

@@ -2,6 +2,7 @@ package api
 
 import (
 	"backend-a-antar-jemput/internal/contract"
+	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/internal/service"
 	"backend-a-antar-jemput/tools/helper"
@@ -10,7 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var ServiceAgent = service.ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
+var ServiceAgent = service.ServiceAgent{Repository: repository.NewAgentRepo(databases.DBCon)}
 var ServiceCustomer = service.ServiceCustomer{Repository: repository.CustomerRepositoryMysql{}}
 
 func FindAgent(c *fiber.Ctx) error {

@@ -9,7 +9,7 @@ type ServiceAgentInterface interface {
 }
 
 type ServiceAgent struct {
-	Repository repository.AgentRepositoryMysql
+	Repository repository.AgentRepositoryInterface
 }
 
 func (S ServiceAgent) GetAgent(id uint) (*contract.DetailAGent, error) {
