@@ -12,7 +12,7 @@ import (
 )
 
 var ServiceAgent = service.ServiceAgent{Repository: repository.NewAgentRepo(databases.DBCon)}
-var ServiceCustomer = service.ServiceCustomer{Repository: repository.CustomerRepositoryMysql{}}
+var ServiceCustomer = service.ServiceCustomer{Repository: repository.CustomerRepositoryMysql{Db: databases.DBCon}}
 
 func FindAgent(c *fiber.Ctx) error {
 	var body *contract.Customer

@@ -2,6 +2,7 @@ package api
 
 import (
 	"backend-a-antar-jemput/internal/contract"
+	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/internal/service"
 	"backend-a-antar-jemput/tools/helper"
@@ -10,7 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var Service = service.ServiceTrasaction{Repository: repository.TransactionRepositoryMysql{}}
+var Service = service.ServiceTrasaction{Repository: repository.TransactionRepositoryMysql{Db: databases.DBCon}}
 
 func CreateTransaction(c *fiber.Ctx) error {
 	var t *contract.Transaction

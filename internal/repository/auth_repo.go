@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/entities"
 
 	"gorm.io/gorm"
@@ -22,19 +21,20 @@ type SessionRepository interface {
 }
 
 type AuthRepositoryMysql struct {
+	Db *gorm.DB
 }
 
-func (AuthRepositoryMysql) GetUserID(ent entities.Login) uint {
+func (a AuthRepositoryMysql) GetUserID(ent entities.Login) uint {
 	var err *gorm.DB
 	var id uint
 	if ent.LoginAs == 1 {
 		user := entities.Customers{Login: ent}
-		err = databases.DBCon.Where(&user).First(&user)
+		err = a.Db.Where(&user).First(&user)
 		id = user.ID
 
 	} else {
 		user := entities.Agents{Login: ent, LoginID: ent.ID}
-		err = databases.DBCon.Where(&user).First(&user)
+		err = a.Db.Where(&user).First(&user)
 		id = user.ID
 	}
 	if err.Error != nil {
@@ -43,32 +43,32 @@ func (AuthRepositoryMysql) GetUserID(ent entities.Login) uint {
 	return id
 }
 
-func (AuthRepositoryMysql) Get(ent *entities.Login) error {
-	err := databases.DBCon.Where(ent).First(&ent)
+func (a AuthRepositoryMysql) Get(ent *entities.Login) error {
+	err := a.Db.Where(ent).First(&ent)
 	if err.Error != nil {
 		return err.Error
 	}
 	return err.Error
 }
 
-func (AuthRepositoryMysql) Create(ent *entities.Login) error {
-	err := databases.DBCon.Create(&ent)
+func (a AuthRepositoryMysql) Create(ent *entities.Login) error {
+	err := a.Db.Create(&ent)
 	if err.Error != nil {
 		return err.Error
 	}
 	return err.Error
 }
 
-func (AuthRepositoryMysql) Update(ent *entities.Login) error {
-	err := databases.DBCon.Save(&ent)
+func (a AuthRepositoryMysql) Update(ent *entities.Login) error {
+	err := a.Db.Save(&ent)
 	if err.Error != nil {
 		return err.Error
 	}
 	return err.Error
 }
 
-func (AuthRepositoryMysql) Delete(ent *entities.Login) error {
-	err := databases.DBCon.Delete(&ent)
+func (a AuthRepositoryMysql) Delete(ent *entities.Login) error {
+	err := a.Db.Delete(&ent)
 	if err.Error != nil {
 		return err.Error
 	}
@@ -76,26 +76,27 @@ func (AuthRepositoryMysql) Delete(ent *entities.Login) error {
 }
 
 type SessionRepositoryMysql struct {
+	Db *gorm.DB
 }
 
-func (SessionRepositoryMysql) Get(ent *entities.Session) error {
-	err := databases.DBCon.Where(ent).First(&ent)
+func (a SessionRepositoryMysql) Get(ent *entities.Session) error {
+	err := a.Db.Where(ent).First(&ent)
 	if err.Error != nil {
 		return err.Error
 	}
 	return err.Error
 }
 
-func (SessionRepositoryMysql) Create(ent *entities.Session) error {
-	err := databases.DBCon.Create(&ent)
+func (a SessionRepositoryMysql) Create(ent *entities.Session) error {
+	err := a.Db.Create(&ent)
 	if err.Error != nil {
 		return err.Error
 	}
 	return err.Error
 }
 
-func (SessionRepositoryMysql) Delete(ent *entities.Session) error {
-	err := databases.DBCon.Where(ent).Delete(&ent)
+func (a SessionRepositoryMysql) Delete(ent *entities.Session) error {
+	err := a.Db.Where(ent).Delete(&ent)
 	if err.Error != nil {
 		return err.Error
 	}

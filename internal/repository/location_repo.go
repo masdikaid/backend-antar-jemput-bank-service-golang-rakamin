@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/entities"
+
+	"gorm.io/gorm"
 )
 
 type LocationRepositoryInterface interface {
@@ -13,12 +14,12 @@ type LocationRepositoryInterface interface {
 }
 
 type LocationRepositoryMysql struct {
+	Db *gorm.DB
 }
 
 func (usr LocationRepositoryMysql) GetByCity(city string) (*entities.Location, error) {
 	ent := entities.Location{City: city}
-	databases.Load()
-	err := databases.DBCon.First(&ent)
+	err := usr.Db.First(&ent)
 	if err.Error != nil {
 		return nil, err.Error
 	}

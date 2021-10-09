@@ -2,6 +2,7 @@ package databases
 
 import (
 	"os"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -21,4 +22,12 @@ func Load() {
 	if err != nil {
 		panic("failed to connect database")
 	}
+	db, err := DBCon.DB()
+	if err != nil {
+		panic(err)
+	}
+	db.SetMaxOpenConns(10)
+	db.SetConnMaxIdleTime(5)
+	db.SetConnMaxLifetime(10 * time.Minute)
+
 }

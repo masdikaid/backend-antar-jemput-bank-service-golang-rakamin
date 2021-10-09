@@ -2,6 +2,7 @@ package api
 
 import (
 	"backend-a-antar-jemput/internal/contract"
+	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/internal/service"
 	"backend-a-antar-jemput/tools/helper"
@@ -11,7 +12,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var AuthService = service.AuthService{AuthRepository: repository.AuthRepositoryMysql{}, SessionRepository: repository.SessionRepositoryMysql{}}
+var AuthService = service.AuthService{AuthRepository: repository.AuthRepositoryMysql{Db: databases.DBCon}, SessionRepository: repository.SessionRepositoryMysql{Db: databases.DBCon}}
 
 // example route for login
 func Login(c *fiber.Ctx) error {
