@@ -33,7 +33,7 @@ func (AuthRepositoryMysql) GetUserID(ent entities.Login) uint {
 		id = user.ID
 
 	} else {
-		user := entities.Agents{Login: ent}
+		user := entities.Agents{Login: ent, LoginID: ent.ID}
 		err = databases.DBCon.Where(&user).First(&user)
 		id = user.ID
 	}

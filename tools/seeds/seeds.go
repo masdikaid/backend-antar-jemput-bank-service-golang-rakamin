@@ -13,7 +13,6 @@ func RunSeeds() {
 		{Username: "bagong", Password: "rakamin00", LoginAs: 2},
 	}
 
-	databases.Load()
 	databases.DBCon.Create(&logins)
 
 	customers := []*entities.Customers{
