@@ -6,7 +6,6 @@ import (
 	"backend-a-antar-jemput/internal/repository"
 	"backend-a-antar-jemput/tools/helper"
 	"errors"
-	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -25,7 +24,6 @@ func (auth AuthService) Login(contr contract.LoginRequest) (string, error) {
 	if err != nil {
 		return err.Error(), err
 	}
-	fmt.Println(">>>> ID " + strconv.Itoa(int(ent.ID)))
 
 	if ent.Password != contr.Password {
 		err = errors.New("wrong password")
