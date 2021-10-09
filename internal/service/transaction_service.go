@@ -2,6 +2,7 @@ package service
 
 import (
 	"backend-a-antar-jemput/internal/contract"
+	"backend-a-antar-jemput/internal/databases"
 	"backend-a-antar-jemput/internal/repository"
 )
 
@@ -15,7 +16,7 @@ type ServiceTrasaction struct {
 func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.TransactionResponse, error) {
 	ent := trans.ToEntity()
 
-	agent := ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
+	agent := ServiceAgent{Repository: repository.NewAgentRepo(databases.DBCon)}
 	cust := ServiceCustomer{Repository: repository.CustomerRepositoryMysql{}}
 
 	agentEnt, agentErr := agent.Repository.GetByID(ent.AgentsID)
@@ -96,7 +97,7 @@ func (S *ServiceTrasaction) SetStatus(id uint, status uint) (*contract.Transacti
 }
 
 func (S *ServiceTrasaction) SetRating(id uint, rating uint) (*contract.TransactionResponse, error) {
-	agentService := ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
+	agentService := ServiceAgent{Repository: repository.NewAgentRepo(databases.DBCon)}
 	res, err := S.Repository.GetByID(id)
 	if err != nil {
 		return nil, err
