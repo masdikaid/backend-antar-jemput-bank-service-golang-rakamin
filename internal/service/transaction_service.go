@@ -17,7 +17,7 @@ func (S *ServiceTrasaction) Create(trans *contract.Transaction) (*contract.Trans
 	ent := trans.ToEntity()
 
 	agent := ServiceAgent{Repository: repository.NewAgentRepo(databases.DBCon)}
-	cust := ServiceCustomer{Repository: repository.CustomerRepositoryMysql{}}
+	cust := ServiceCustomer{Repository: repository.CustomerRepositoryMysql{Db: databases.DBCon}}
 
 	agentEnt, agentErr := agent.Repository.GetByID(ent.AgentsID)
 	custEnt, custErr := cust.Repository.GetByID(ent.CustomersID)
