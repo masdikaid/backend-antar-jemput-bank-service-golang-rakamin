@@ -19,6 +19,10 @@ type AgentRepositoryMysql struct {
 	Db *gorm.DB
 }
 
+func NewAgentRepo(db *gorm.DB) AgentRepositoryInterface {
+	return &AgentRepositoryMysql{Db: db}
+}
+
 func (usr AgentRepositoryMysql) GetByID(id uint) (*entities.Agents, error) {
 	ent := entities.Agents{}
 
@@ -75,7 +79,3 @@ func (usr AgentRepositoryMysql) Update(ent *entities.Agents) (*entities.Agents, 
 // 	}
 // 	return ent, nil
 // }
-
-func NewAgentRepo(db *gorm.DB) AgentRepositoryInterface {
-	return &AgentRepositoryMysql{Db: db}
-}

@@ -24,4 +24,8 @@ func SetupRoutes(app *fiber.App) {
 	apiroute.Post("/transaksi/selesai", api.FinishTransactions)
 	apiroute.Post("/transaksi/rating", api.RatingTransactions)
 	apiroute.Delete("/transaksi/delete/", api.DeleteTransactions)
+	apiroute.Get("/provinsi", api.GetProvince)
+	apiroute.Post("/kota", api.GetCity)
+	apiroute.Post("/kecamatan", api.GetDistrict)
+
 }

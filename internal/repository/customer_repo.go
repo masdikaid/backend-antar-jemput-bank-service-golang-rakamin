@@ -8,13 +8,17 @@ import (
 
 type CustomerRepositoryInterface interface {
 	// Create(user *entities.Customers) (*entities.Customers, error) //1
-	GetByID(id int) (*entities.Customers, error) //1
+	GetByID(id uint) (*entities.Customers, error)
 	// Update() (*entities.Transaction, error)                      //1
 	// Delete() error                                               //10
 }
 
 type CustomerRepositoryMysql struct {
 	Db *gorm.DB
+}
+
+func NewCustomerRepo(db *gorm.DB) CustomerRepositoryInterface {
+	return &CustomerRepositoryMysql{Db: db}
 }
 
 func (usr CustomerRepositoryMysql) GetByID(id uint) (*entities.Customers, error) {

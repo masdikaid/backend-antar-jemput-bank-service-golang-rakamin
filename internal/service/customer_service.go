@@ -10,7 +10,7 @@ type ServiceCustomerInterface interface {
 }
 
 type ServiceCustomer struct {
-	Repository repository.CustomerRepositoryMysql
+	Repository repository.CustomerRepositoryInterface
 }
 
 func (S ServiceCustomer) GetCustomer(id uint) (*contract.Customer, error) {
