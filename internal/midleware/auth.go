@@ -15,7 +15,7 @@ import (
 
 func AuthMiddleware() fiber.Handler {
 	return jwtware.New(jwtware.Config{
-		SigningKey:     []byte(os.Getenv("SECRET")),
+		SigningKey:     []byte(os.Getenv("JWT_SECRET")),
 		SuccessHandler: ValidateSession,
 		ErrorHandler:   jwtError,
 	})
@@ -25,7 +25,7 @@ func ValidateSession(c *fiber.Ctx) error {
 	services := service.AuthService{AuthRepository: repository.AuthRepositoryMysql{Db: databases.DBCon}, SessionRepository: repository.SessionRepositoryMysql{Db: databases.DBCon}}
 	strToken := c.Get(fiber.HeaderAuthorization)[len("Bearer "):]
 	token, err := jwt.Parse(strToken, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("SECRET")), nil
+		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
 	if err != nil {
 		return jwtError(c, err)

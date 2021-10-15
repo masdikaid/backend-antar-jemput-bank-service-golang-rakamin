@@ -55,7 +55,7 @@ func (auth AuthService) Login(contr contract.LoginRequest) (string, error) {
 	claims["sid"] = LoginContract.SID
 	claims["exp"] = LoginContract.ExpiredAt
 	claims["iat"] = LoginContract.IssuedAt
-	t, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	t, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return err.Error(), err
 	}

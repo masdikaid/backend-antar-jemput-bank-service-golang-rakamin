@@ -53,5 +53,5 @@ func Logout(c *fiber.Ctx) error {
 }
 
 func JwtFunc(claim *jwt.Token) (interface{}, error) {
-	return []byte(os.Getenv("SECRET")), nil
+	return []byte(os.Getenv("JWT_SECRET")), nil
 }
