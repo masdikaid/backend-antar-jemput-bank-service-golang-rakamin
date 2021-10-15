@@ -8,11 +8,10 @@ import (
 
 type AgentRepositoryInterface interface {
 	GetByID(id uint) (*entities.Agents, error)
-	Update(ent *entities.Agents) (*entities.Agents, error)
-	GetAvailableAgent(service, district string, trx int) (*[]entities.Agents, error)
+	GetServiceByName(name string) (*entities.Services, error)
 	GetServiceByID(id uint) (*[]entities.Services, error)
-	// Create(user *entities.Agents) (*entities.Agents, error)
-	// Delete() error
+	GetAvailableAgent(service, city, district string, trx int) (*[]entities.Agents, error)
+	Update(ent *entities.Agents) (*entities.Agents, error)
 }
 
 type AgentRepositoryMysql struct {
@@ -26,10 +25,21 @@ func NewAgentRepo(db *gorm.DB) AgentRepositoryInterface {
 func (usr AgentRepositoryMysql) GetByID(id uint) (*entities.Agents, error) {
 	ent := entities.Agents{}
 
-	err := usr.Db.Preload("Login").Preload("Location").Preload("Services").First(&ent, id)
+	err := usr.Db.Preload("Login").Preload("Location").First(&ent, id)
 	if err.Error != nil {
 		return nil, err.Error
 	}
+	return &ent, nil
+}
+
+func (usr AgentRepositoryMysql) GetServiceByName(name string) (*entities.Services, error) {
+	ent := entities.Services{}
+
+	err := usr.Db.First(&ent, "service_name=?", name)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+
 	return &ent, nil
 }
 
@@ -45,7 +55,7 @@ func (usr AgentRepositoryMysql) GetServiceByID(id uint) (*[]entities.Services, e
 	return &ent, nil
 }
 
-func (usr AgentRepositoryMysql) GetAvailableAgent(service, district string, trx int) (*[]entities.Agents, error) {
+func (usr AgentRepositoryMysql) GetAvailableAgent(service, city, district string, trx int) (*[]entities.Agents, error) {
 	ent := []entities.Agents{}
 	ser := entities.Services{}
 
@@ -55,7 +65,7 @@ func (usr AgentRepositoryMysql) GetAvailableAgent(service, district string, trx 
 	}
 
 	errr := usr.Db.Preload("Location").Joins("Location").Joins("JOIN agent_services ON agents.id=agent_services.agents_id AND agent_services.services_id=?", ser.ID).
-		Where("district=? AND max_trx>=? AND is_available=?", district, trx, true).Find(&ent)
+		Where("city=? AND district=? AND max_trx>=? AND is_available=?", city, district, trx, true).Find(&ent)
 	if errr.Error != nil {
 		return nil, errr.Error
 	}
@@ -64,18 +74,20 @@ func (usr AgentRepositoryMysql) GetAvailableAgent(service, district string, trx 
 }
 
 func (usr AgentRepositoryMysql) Update(ent *entities.Agents) (*entities.Agents, error) {
+	errS := usr.Db.Table("agent_services").Where("agents_id=?", ent.ID).Delete("agent_services")
+	if errS.Error != nil {
+		return nil, errS.Error
+	}
+
 	err := usr.Db.Save(ent)
 	if err.Error != nil {
 		return nil, err.Error
 	}
-	return ent, nil
-}
 
-// func (usr AgentRepositoryMysql) Create(ent *entities.Agents) (*entities.Agents, error) {
-//
-// 	res := databases.Create(&ent)
-// 	if res.Error != nil {
-// 		return nil, res.Error
-// 	}
-// 	return ent, nil
-// }
+	resp := entities.Agents{}
+	errR := usr.Db.Preload("Location").First(&resp, ent.ID)
+	if errR.Error != nil {
+		return nil, err.Error
+	}
+	return &resp, nil
+}

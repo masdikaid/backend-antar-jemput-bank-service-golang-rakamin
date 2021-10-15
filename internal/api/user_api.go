@@ -13,6 +13,7 @@ import (
 
 var ServiceAgent = service.ServiceAgent{Repository: repository.NewAgentRepo(databases.DBCon)}
 var ServiceCustomer = service.ServiceCustomer{Repository: repository.NewCustomerRepo(databases.DBCon)}
+var ServiceLocation = service.ServiceLocation{Repository: repository.NewLocationRepo(databases.DBCon)}
 
 func FindAgent(c *fiber.Ctx) error {
 	var body *contract.Customer
@@ -21,7 +22,7 @@ func FindAgent(c *fiber.Ctx) error {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, "bad request")
 	}
 
-	list, errr := ServiceAgent.GetListAgent(body.Service, body.District, body.Amount)
+	list, errr := ServiceAgent.GetListAgent(body.Service, body.City, body.District, body.Amount)
 	if errr != nil {
 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, "bad request")
 	}
@@ -64,17 +65,52 @@ func GetProfile(c *fiber.Ctx) error {
 	}
 }
 
-// func CreateProfileAgent(c *fiber.Ctx) error {
-// 	var agent *contract.DetailAGent
-// 	err := c.BodyParser(&agent)
-// 	if err != nil {
-// 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
-// 	}
+func UpdateProfile(c *fiber.Ctx) error {
+	var agent *contract.DetailAGent
+	var customer *contract.Customer
+	var err error
+	custID, _ := strconv.ParseUint(c.Query("id_customer"), 10, 64)
+	agentID, _ := strconv.ParseUint(c.Query("id_agen"), 10, 64)
 
-// 	_, errr := ServiceAgent.Create(agent)
-// 	if errr != nil {
-// 		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, errr.Error())
-// 	}
+	switch {
+	case custID != 0:
+		err = c.BodyParser(&customer)
+		if err != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		}
 
-// 	return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "created", agent)
-// }
+		customer, err = ServiceCustomer.UpdateCustomer(customer)
+		if err != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		}
+		return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Updated", customer)
+
+	case agentID != 0:
+		err = c.BodyParser(&agent)
+		if err != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		}
+
+		loc := agent.ToLocation()
+		err = ServiceLocation.Update(loc, uint(agentID))
+		if err != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		}
+
+		agent, err = ServiceAgent.UpdateAgent(agent, uint(agentID))
+		if err != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		}
+
+		list, errr := ServiceAgent.GetAgentService(uint(agentID))
+		if errr != nil {
+			return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, errr.Error())
+		}
+
+		agent.Service = list
+		return helper.JsonResponseOkBuilder(c, fiber.StatusOK, "Updated", agent)
+
+	default:
+		return helper.JsonResponseFailBuilder(c, fiber.StatusNotFound, err.Error())
+	}
+}

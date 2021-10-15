@@ -48,6 +48,30 @@ func (a *DetailAGent) FromEntity(source entities.Agents) {
 	a.Address = source.Location.Address
 }
 
+func (a *DetailAGent) ToEntity(Login, Location uint, service []*entities.Services) *entities.Agents {
+	ent := entities.Agents{}
+	helper.ConvertStruct(a, ent)
+	ent.Name = a.Name
+	ent.OutletName = a.OutletName
+	ent.PhoneNumber = a.PhoneNumber
+	ent.IsAvailable = a.IsAvailable
+	ent.MaxTrx = a.MaxTrx
+	ent.LocationID = Location
+	ent.LoginID = Login
+	ent.Services = service
+	return &ent
+}
+
+func (a *DetailAGent) ToLocation() *Location {
+	ent := Location{}
+	helper.ConvertStruct(a, ent)
+	ent.Province = a.Province
+	ent.City = a.City
+	ent.District = a.District
+	ent.Address = a.Address
+	return &ent
+}
+
 type Service struct {
 	ID          uint   `json:"id"`
 	ServiceName string `json:"judul"`
