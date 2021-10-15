@@ -20,7 +20,7 @@ env:
     MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
     MINIO_REGION: US-EAST1
     MINIO_BUCKET: ${{ secrets.TEAM_NAME }}-rakamin
-    EXPIRED-SESSION: 5
+    EXPIRED_SESSION: ${{ secrets.EXPIRED_SESSION }}
 
 
 jobs:
