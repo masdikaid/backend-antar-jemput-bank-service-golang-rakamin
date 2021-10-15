@@ -24,8 +24,7 @@ func Login(c *fiber.Ctx) error {
 	var token string
 	token, err = AuthService.Login(contr)
 	if err != nil {
-		panic(err)
-		// return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
+		return helper.JsonResponseFailBuilder(c, fiber.StatusBadRequest, err.Error())
 	}
 	return helper.JsonResponseOkBuilder(c, fiber.StatusAccepted, "success", token)
 }
