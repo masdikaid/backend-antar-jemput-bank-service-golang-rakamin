@@ -47,7 +47,7 @@ func main() {
 		app := SetupFiber()
 
 		// listening
-		log.Fatal(app.Listen(":" + os.Getenv("PORT")))
+		log.Fatal(app.Listen(":" + os.Getenv("APP_PORT")))
 	}
 
 }
