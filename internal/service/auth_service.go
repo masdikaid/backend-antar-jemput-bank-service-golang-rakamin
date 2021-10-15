@@ -30,11 +30,11 @@ func (auth AuthService) Login(contr contract.LoginRequest) (string, error) {
 		err = errors.New("wrong password")
 		return err.Error(), err
 	}
-	fmt.Println(os.Getenv("EXPIRED-SESSION"))
-	expDay, err := strconv.ParseInt(os.Getenv("EXPIRED-SESSION"), 32, 10)
+	fmt.Println(os.Getenv("EXPIRED_SESSION"))
+	expDay, err := strconv.ParseInt(os.Getenv("EXPIRED_SESSION"), 32, 10)
 	if err != nil {
-		panic(err)
-		// return err.Error(), err
+		// panic(err)
+		return err.Error(), err
 	}
 
 	session := entities.Session{Login: ent, SID: helper.GenerateSessionID(), ExpiredAt: time.Now().AddDate(0, 0, int(expDay))}
