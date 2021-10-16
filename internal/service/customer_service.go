@@ -7,6 +7,8 @@ import (
 )
 
 type ServiceCustomerInterface interface {
+	GetCustomer(id uint) (*contract.Customer, error)
+	UpdateCustomer(cust *contract.Customer) (*contract.Customer, error)
 }
 
 type ServiceCustomer struct {
@@ -22,4 +24,8 @@ func (S ServiceCustomer) GetCustomer(id uint) (*contract.Customer, error) {
 	contract := contract.Customer{}
 	helper.ConvertStruct(res, &contract)
 	return &contract, nil
+}
+
+func (S ServiceCustomer) UpdateCustomer(cust *contract.Customer) (*contract.Customer, error) {
+	return nil, nil
 }

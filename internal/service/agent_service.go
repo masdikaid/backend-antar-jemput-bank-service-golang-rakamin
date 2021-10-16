@@ -2,10 +2,16 @@ package service
 
 import (
 	"backend-a-antar-jemput/internal/contract"
+	"backend-a-antar-jemput/internal/entities"
 	"backend-a-antar-jemput/internal/repository"
 )
 
 type ServiceAgentInterface interface {
+	GetAgent(id uint) (*contract.DetailAGent, error)
+	GetAgentService(id uint) ([]*contract.Service, error)
+	GetListAgent(service, city, district string, trx int) ([]*contract.ListAgent, error)
+	UpdateRating(id uint, rating int) error
+	UpdateAgent(agent *contract.DetailAGent, agentID uint) (*contract.DetailAGent, error)
 }
 
 type ServiceAgent struct {
@@ -37,8 +43,8 @@ func (S ServiceAgent) GetAgentService(id uint) ([]*contract.Service, error) {
 	return contractList, nil
 }
 
-func (S ServiceAgent) GetListAgent(service, district string, trx int) ([]*contract.ListAgent, error) {
-	res, err := S.Repository.GetAvailableAgent(service, district, trx)
+func (S ServiceAgent) GetListAgent(service, city, district string, trx int) ([]*contract.ListAgent, error) {
+	res, err := S.Repository.GetAvailableAgent(service, city, district, trx)
 	if err != nil {
 		return nil, err
 	}
@@ -79,23 +85,32 @@ func (S ServiceAgent) UpdateRating(id uint, rating int) error {
 	return nil
 }
 
-// func (S ServiceAgent) Create(agent *contract.DetailAGent) (*contract.Agent, error) {
-// 	ent := agent.ToEntity()
+func (S ServiceAgent) UpdateAgent(agent *contract.DetailAGent, agentID uint) (*contract.DetailAGent, error) {
+	res, err := S.Repository.GetByID(agentID)
+	if err != nil {
+		return nil, err
+	}
+	listSer := []*entities.Services{}
+	for _, ser := range agent.Service {
+		temp, errS := S.Repository.GetServiceByName(ser.ServiceName)
+		if errS != nil {
+			return nil, errS
+		}
+		listSer = append(listSer, temp)
+	}
 
-// 	agent := ServiceAgent{Repository: repository.AgentRepositoryMysql{}}
-// 	agentL, agentErr := agent.Repository.GetByID(ent.AgentsID)
-// 	if agentErr != nil || custErr != nil {
-// 		return nil, agentErr
-// 	}
+	res.Name = agent.Name
+	res.OutletName = agent.OutletName
+	res.PhoneNumber = agent.PhoneNumber
+	res.MaxTrx = agent.MaxTrx
+	res.IsAvailable = agent.IsAvailable
+	res.Services = listSer
 
-// 	ent.Login=*
-// 	ent.Location.Login.ID = agent.LoginID
-
-// 	res, err := S.Repository.Create(ent)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	contract := contract.Agent{}
-// 	contract.FromEntity(*res)
-// 	return &contract, nil
-// }
+	resA, errA := S.Repository.Update(res)
+	if errA != nil {
+		return nil, errA
+	}
+	contract := contract.DetailAGent{}
+	contract.FromEntity(*resA)
+	return &contract, nil
+}
