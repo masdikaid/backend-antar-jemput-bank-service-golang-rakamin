@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backend-a-antar-jemput/internal/entities"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -64,12 +65,19 @@ func (usr AgentRepositoryMysql) GetAvailableAgent(service, city, district string
 		return nil, err.Error
 	}
 
-	errr := usr.Db.Preload("Location").Joins("Location").Joins("JOIN agent_services ON agents.id=agent_services.agents_id AND agent_services.services_id=?", ser.ID).
-		Where("city=? AND district=? AND max_trx>=? AND is_available=?", city, district, trx, true).Find(&ent)
+	// errr := usr.Db.Preload("Location").Joins("Location").Joins("JOIN agent_services ON agents.id=agent_services.agents_id AND agent_services.services_id=?", ser.ID).
+	// 	Where("city=? AND district=? AND max_trx>=? AND is_available=?", city, district, trx, true).Find(&ent)
+	// if errr.Error != nil {
+	// 	return nil, errr.Error
+	// }
+
+	errr := usr.Db.Preload("Location").Find(&ent)
 	if errr.Error != nil {
 		return nil, errr.Error
 	}
+	fmt.Println(ent)
 
+	fmt.Println(service, city, district, trx)
 	return &ent, nil
 }
 
