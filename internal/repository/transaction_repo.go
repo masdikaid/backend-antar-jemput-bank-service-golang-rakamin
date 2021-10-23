@@ -32,7 +32,7 @@ func (T TransactionRepositoryMysql) Create(ent *entities.Transaction) (*entities
 
 func (T TransactionRepositoryMysql) GetAll() ([]*entities.Transaction, error) {
 	res := []*entities.Transaction{}
-	err := T.Db.Preload("Agents.Location").Preload("Customers").Find(&res)
+	err := T.Db.Preload("Agents.Location").Preload("Customers").Order("id desc").Find(&res)
 	if err.Error != nil {
 		return nil, err.Error
 	}
@@ -52,7 +52,7 @@ func (T TransactionRepositoryMysql) GetAllByID(tipe string, id uint) ([]*entitie
 	}
 
 	res := []*entities.Transaction{}
-	err := T.Db.Preload("Agents.Location").Preload("Customers").Where(query, id).Find(&res)
+	err := T.Db.Preload("Agents.Location").Preload("Customers").Where(query, id).Order("id desc").Find(&res)
 	if err.Error != nil {
 		return nil, err.Error
 	}

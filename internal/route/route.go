@@ -9,11 +9,11 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	// create route group api
+	app.Get("/", api.Index)
 	app.Post("/login", api.Login)
 	apiroute := app.Group("", midleware.AuthMiddleware())
 
 	// declare route
-	apiroute.Get("/", api.Index)
 	apiroute.Get("/logout", api.Logout)
 	apiroute.Post("/cariagen", api.FindAgent)
 	apiroute.Get("/profil", api.GetProfile)
